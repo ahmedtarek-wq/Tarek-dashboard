@@ -1,0 +1,461 @@
+<title>Portfolio Pulse</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f4f5f7;
+  --surface:#ffffff;
+  --surface-2:#eceef2;
+  --border:#dde1e8;
+  --text:#161b22;
+  --text-muted:#5a6472;
+  --accent:#2b6f76;
+  --accent-strong:#1f5459;
+  --accent-soft:#e3eeee;
+  --good:#1e8a5c;
+  --good-soft:#e3f5ec;
+  --warn:#a8720f;
+  --warn-soft:#fbf1dc;
+  --critical:#c0392b;
+  --critical-soft:#fbe7e3;
+  --muted-badge:#8a93a3;
+  --muted-soft:#eef0f3;
+  --shadow: 0 1px 2px rgba(20,25,35,.04), 0 8px 20px -12px rgba(20,25,35,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12151b;
+    --surface:#1a1e26;
+    --surface-2:#20242e;
+    --border:#2b303b;
+    --text:#e7eaf0;
+    --text-muted:#9aa3b2;
+    --accent:#5fb3ae;
+    --accent-strong:#7fc7c2;
+    --accent-soft:#1c3230;
+    --good:#4cc189;
+    --good-soft:#173829;
+    --warn:#e0ac4b;
+    --warn-soft:#3a2e14;
+    --critical:#e8695c;
+    --critical-soft:#3a1f1c;
+    --muted-badge:#7c8494;
+    --muted-soft:#242833;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12151b;
+  --surface:#1a1e26;
+  --surface-2:#20242e;
+  --border:#2b303b;
+  --text:#e7eaf0;
+  --text-muted:#9aa3b2;
+  --accent:#5fb3ae;
+  --accent-strong:#7fc7c2;
+  --accent-soft:#1c3230;
+  --good:#4cc189;
+  --good-soft:#173829;
+  --warn:#e0ac4b;
+  --warn-soft:#3a2e14;
+  --critical:#e8695c;
+  --critical-soft:#3a1f1c;
+  --muted-badge:#7c8494;
+  --muted-soft:#242833;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans','Segoe UI',Tahoma,Arial,sans-serif;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums;}
+.wrap{max-width:1320px;margin:0 auto;padding:28px 24px 60px;}
+
+/* header */
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px;flex-wrap:wrap;}
+.topbar h1{font-size:26px;font-weight:700;letter-spacing:-.01em;margin:0 0 4px;text-wrap:balance;}
+.topbar .sub{color:var(--text-muted);font-size:13.5px;}
+.topbar .sub b{color:var(--text);font-weight:600;}
+.meta-pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--text-muted);box-shadow:var(--shadow);}
+.meta-pill b{color:var(--text);font-weight:600;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);}
+.kpi .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:8px;}
+.kpi .value{font-size:26px;font-weight:700;font-family:'IBM Plex Mono',monospace;letter-spacing:-.01em;}
+.kpi .foot{font-size:12px;color:var(--text-muted);margin-top:4px;}
+.kpi.accent .value{color:var(--accent-strong);}
+.kpi.good .value{color:var(--good);}
+.kpi.warn .value{color:var(--warn);}
+.kpi.critical .value{color:var(--critical);}
+
+/* generic panel */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);}
+.panel-head h2{font-size:14.5px;font-weight:600;margin:0;}
+.panel-head .hint{font-size:12px;color:var(--text-muted);}
+.panel-body{padding:16px 18px;}
+
+/* two column row */
+.row2{display:grid;grid-template-columns:0.86fr 1.14fr;gap:14px;margin-bottom:14px;align-items:start;}
+@media (max-width:980px){.row2{grid-template-columns:1fr;} .kpis{grid-template-columns:repeat(2,1fr);}}
+
+/* alerts list */
+.alert-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border);}
+.alert-item:last-child{border-bottom:none;}
+.alert-rank{width:20px;flex:none;color:var(--text-muted);font-size:12px;font-family:'IBM Plex Mono',monospace;}
+.alert-main{flex:1;min-width:0;}
+.alert-name{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.alert-sub{font-size:11.5px;color:var(--text-muted);margin-top:1px;}
+.alert-figs{text-align:right;flex:none;}
+.alert-rto{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;}
+.alert-count{font-size:11px;color:var(--text-muted);}
+.trend{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace;margin-inline-start:5px;}
+.trend.up{color:var(--good);}
+.trend.down{color:var(--critical);}
+.trend.flat{color:var(--text-muted);}
+.trend.na{color:var(--muted-badge);font-weight:400;}
+
+/* badges / pills */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;}
+.pill.good{background:var(--good-soft);color:var(--good);}
+.pill.warn{background:var(--warn-soft);color:var(--warn);}
+.pill.critical{background:var(--critical-soft);color:var(--critical);}
+.pill.muted{background:var(--muted-soft);color:var(--muted-badge);}
+.pill .sq{width:6px;height:6px;border-radius:2px;background:currentColor;}
+
+/* scatter */
+.scatter-wrap svg{width:100%;height:auto;display:block;}
+.scatter-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-muted);margin-top:10px;}
+.scatter-legend span{display:inline-flex;align-items:center;gap:5px;}
+.scatter-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
+
+/* table */
+.table-controls{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.search{position:relative;flex:1;min-width:180px;max-width:320px;}
+.search input{width:100%;padding:8px 12px 8px 32px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;font-family:inherit;}
+.search input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.5;}
+.toggle-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-muted);cursor:pointer;user-select:none;padding:7px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);}
+.toggle-chip input{accent-color:var(--accent);}
+.count-tag{margin-left:auto;font-size:12px;color:var(--text-muted);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:920px;}
+thead th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+thead th:hover{color:var(--text);}
+thead th.sorted::after{content:' ▾';font-size:9px;}
+thead th.sorted.asc::after{content:' ▴';}
+tbody td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tbody tr:hover{background:var(--surface-2);}
+td.num,th.num{text-align:right;font-family:'IBM Plex Mono',monospace;}
+td.name{font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+td.branch,td.gov{color:var(--text-muted);font-size:12.5px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-cell{display:flex;align-items:center;gap:8px;}
+.bar-track{width:56px;height:6px;border-radius:3px;background:var(--muted-soft);overflow:hidden;flex:none;}
+.bar-fill{height:100%;border-radius:3px;}
+
+/* bottom bars */
+.barlist{display:flex;flex-direction:column;gap:9px;}
+.barlist .row{display:grid;grid-template-columns:100px 1fr 46px;align-items:center;gap:10px;font-size:12.5px;}
+.barlist .row .lbl{color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.barlist .track{height:9px;border-radius:5px;background:var(--muted-soft);overflow:hidden;}
+.barlist .fill{height:100%;border-radius:5px;background:var(--accent);}
+.barlist .val{text-align:right;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);}
+
+.footnote{margin-top:18px;font-size:12px;color:var(--text-muted);line-height:1.6;padding:14px 4px 0;border-top:1px solid var(--border);}
+.footnote b{color:var(--text);}
+
+::selection{background:var(--accent-soft);}
+</style>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div>
+      <h1>Portfolio Pulse</h1>
+      <div class="sub">DSR / RTO review across <b id="hdrCount">122</b> managed businesses — Bosta Admin</div>
+    </div>
+    <div class="meta-pill"><span class="dot"></span> Picked At <b>1–20 Sep 2026</b> · pulled live from Deliveries Search</div>
+  </div>
+
+  <div class="meta-pill" id="trendMeta" style="margin-bottom:16px;display:none;"></div>
+
+  <div class="kpis" id="kpiRow"></div>
+
+  <div class="row2">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Needs attention</h2>
+        <span class="hint">by RTO orders, min. 10 orders</span>
+      </div>
+      <div class="panel-body" id="alertsBody"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Volume vs. RTO risk</h2>
+        <span class="hint">each dot = one business</span>
+      </div>
+      <div class="panel-body scatter-wrap" id="scatterBody"></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div class="table-controls">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="searchBox" type="text" placeholder="Search business…">
+      </div>
+      <label class="toggle-chip"><input type="checkbox" id="hideZero" checked> Hide businesses with 0 orders</label>
+      <span class="count-tag" id="rowCount"></span>
+    </div>
+    <div class="table-scroll">
+      <table id="bizTable">
+        <thead>
+          <tr>
+            <th data-key="name">Business</th>
+            <th data-key="totalOrders" class="num">Orders</th>
+            <th data-key="delivered" class="num">Delivered</th>
+            <th data-key="rto" class="num">RTO</th>
+            <th data-key="dsrPct" class="num">DSR %</th>
+            <th data-key="rtoPct" class="num sorted">RTO %</th>
+            <th data-key="status">Status</th>
+            <th>Top RTO branch</th>
+            <th>Top governorate</th>
+          </tr>
+        </thead>
+        <tbody id="bizBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Governorates, portfolio-wide</h2>
+        <span class="hint">all orders, top 12</span>
+      </div>
+      <div class="panel-body"><div class="barlist" id="govBars"></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Branches handling the most RTO</h2>
+        <span class="hint">by returned order count, top 12</span>
+      </div>
+      <div class="panel-body"><div class="barlist" id="branchBars"></div></div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <b>Method:</b> pulled directly from <span class="mono">app.bosta.co/api/v0/deliveries/search</span> filtered by Business ID + Picked At (1–20 Sep 2026). DSR% = Delivered ÷ (Delivered + RTO) among this month's picked-up orders; RTO% = RTO ÷ (Delivered + RTO). Branch = the RTO order's assigned hub.
+    <b>Not included:</b> transfer/handover document (محول) status per RTO order — that flag isn't exposed on the deliveries list/search response, only inside each order's own timeline, so it wasn't pulled for all 122 businesses in this run. Say the word and it can be added for a shortlist of businesses.
+    <b>Trend arrows (▲/▼):</b> compare each business's RTO% in this update to its RTO% in the last saved update (stored automatically each time this dashboard refreshes) — ▲ green = RTO% improved (went down), ▼ red = RTO% worsened (went up), → grey = essentially unchanged (&lt;0.5pp), • = no prior snapshot yet to compare against. The very first update has no arrows for this reason; every update after it will.
+  </div>
+
+</div>
+
+<script>
+const DATA = {"0HUbDC1QdvfBbu5kFUI0j":{"name":"SoartheProject","id":"0HUbDC1QdvfBbu5kFUI0j","totalOrders":19,"sendTotal":10,"delivered":10,"rto":4,"dsrPct":71.4,"rtoPct":28.6,"branch":{"FM-New Cairo":3,"Zahraa Nasr City Hub":1},"gov":{"Giza":5,"Dakahlia":2,"Cairo":11,"Suez":1}},"0kLUWX2hfmM7wNwU4eCby":{"name":"SUTRA","id":"0kLUWX2hfmM7wNwU4eCby","totalOrders":5,"sendTotal":4,"delivered":4,"rto":1,"dsrPct":80,"rtoPct":20,"branch":{"FM-Obour":1},"gov":{"El Kalioubia":1,"Monufia":2,"Giza":1,"Assuit":1}},"0xgPZDJXbo3oqJ7RgJAmm":{"name":"Allura Egypt","id":"0xgPZDJXbo3oqJ7RgJAmm","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"1h2zYsV4gGpDnXeReRZs9":{"name":"عالم المجوهرات","id":"1h2zYsV4gGpDnXeReRZs9","totalOrders":618,"sendTotal":370,"delivered":302,"rto":244,"dsrPct":55.3,"rtoPct":44.7,"branch":{"فرع جسر السويس":5,"FM-Obour":234,"Gesr Elsuez Hub":5},"gov":{"Port Said":13,"Menya":22,"El Kalioubia":16,"Assuit":22,"Kafr Alsheikh":19,"Behira":31,"Giza":50,"Bani Suif":18,"Sharqia":47,"Suez":14,"Dakahlia":35,"Alexandria":66,"Cairo":76,"Aswan":13,"Ismailia":12,"Fayoum":15,"Sohag":23,"Monufia":20,"South Sinai":6,"Luxor":9,"Damietta":16,"Gharbia":25,"New Valley":7,"Matrouh":13,"Qena":12,"Red Sea":15,"North Coast":3}},"1UBflMA1QiDgrl5vfaLAE":{"name":"غيمة","id":"1UBflMA1QiDgrl5vfaLAE","totalOrders":887,"sendTotal":837,"delivered":782,"rto":36,"dsrPct":95.6,"rtoPct":4.4,"branch":{"فرع وسط البلد":3,"FM-Maadi":33},"gov":{"Dakahlia":88,"Sohag":21,"El Kalioubia":55,"Sharqia":82,"Behira":69,"Suez":25,"Gharbia":66,"Kafr Alsheikh":37,"Damietta":38,"Ismailia":19,"South Sinai":2,"Port Said":23,"Menya":22,"Monufia":46,"Qena":25,"Assuit":28,"Luxor":2,"Bani Suif":11,"Giza":12,"Cairo":20,"Red Sea":23,"Alexandria":149,"Fayoum":12,"New Valley":2,"Aswan":9,"Matrouh":1}},"20p9vudcgg2He2j5nkFnk":{"name":"براند فاشون","id":"20p9vudcgg2He2j5nkFnk","totalOrders":539,"sendTotal":476,"delivered":447,"rto":49,"dsrPct":90.1,"rtoPct":9.9,"branch":{"FM-New Cairo":46,"فرع هليوبوليس":3},"gov":{"Alexandria":66,"Gharbia":32,"Cairo":173,"Dakahlia":38,"Ismailia":13,"Sharqia":25,"Fayoum":8,"Bani Suif":5,"South Sinai":3,"Monufia":12,"Giza":96,"Luxor":2,"Kafr Alsheikh":5,"Port Said":11,"Matrouh":2,"Assuit":3,"Suez":5,"Menya":4,"Damietta":8,"Behira":7,"El Kalioubia":8,"Sohag":5,"North Coast":2,"New Valley":1,"Red Sea":2,"Aswan":3}},"2MLhum7eAaEkXYTLtMKms":{"name":"tat","id":"2MLhum7eAaEkXYTLtMKms","totalOrders":1036,"sendTotal":840,"delivered":753,"rto":166,"dsrPct":81.9,"rtoPct":18.1,"branch":{"فرع الهرم":8,"FM Abo Rawash":157,"Marg Hub":1},"gov":{"Giza":213,"Alexandria":73,"Sohag":13,"Fayoum":7,"Cairo":451,"El Kalioubia":30,"Dakahlia":48,"Monufia":18,"Sharqia":34,"Suez":3,"Gharbia":17,"Matrouh":5,"Red Sea":7,"Kafr Alsheikh":14,"Assuit":10,"Menya":13,"Ismailia":12,"Bani Suif":8,"Qena":5,"Behira":14,"Damietta":18,"Port Said":6,"Luxor":1,"South Sinai":5,"Aswan":10,"New Valley":1}},"3dKlRDnUyFyxngZ1jZFFf":{"name":"Zeus Shields","id":"3dKlRDnUyFyxngZ1jZFFf","totalOrders":400,"sendTotal":354,"delivered":305,"rto":32,"dsrPct":90.5,"rtoPct":9.5,"branch":{"3rd settelment":2,"فرع المقطم":2,"Fulfillment Hub":27,"FM-New Cairo":1},"gov":{"Aswan":5,"Matrouh":3,"Luxor":4,"Gharbia":12,"Cairo":189,"Suez":4,"Giza":65,"Behira":9,"Dakahlia":17,"Alexandria":32,"Red Sea":1,"Menya":6,"Ismailia":7,"Monufia":5,"Sohag":7,"Damietta":4,"Kafr Alsheikh":5,"El Kalioubia":11,"Sharqia":7,"Bani Suif":1,"Assuit":4,"Fayoum":1,"South Sinai":1}},"4gqD6KMDoJ6aPmqSRw9hy":{"name":"Hadya","id":"4gqD6KMDoJ6aPmqSRw9hy","totalOrders":286,"sendTotal":205,"delivered":177,"rto":78,"dsrPct":69.4,"rtoPct":30.6,"branch":{"فرع المقطم":2,"FM-Maadi":76},"gov":{"Giza":46,"Alexandria":17,"Cairo":179,"Sharqia":4,"Dakahlia":6,"Kafr Alsheikh":4,"Gharbia":8,"Monufia":1,"El Kalioubia":8,"Red Sea":1,"Suez":1,"Ismailia":1,"Damietta":3,"Bani Suif":1,"Menya":1,"Behira":2,"Port Said":1,"Fayoum":1,"Assuit":1}},"4lpFg3QCuOUFlMqt1LVKd":{"name":"ZELIE","id":"4lpFg3QCuOUFlMqt1LVKd","totalOrders":300,"sendTotal":206,"delivered":164,"rto":84,"dsrPct":66.1,"rtoPct":33.9,"branch":{"فرع وسط البلد":3,"FM-Maadi":81},"gov":{"Giza":67,"Cairo":136,"Alexandria":29,"Behira":6,"El Kalioubia":8,"Sharqia":8,"Gharbia":5,"Damietta":2,"Dakahlia":7,"Port Said":3,"Qena":3,"Ismailia":2,"Assuit":3,"Suez":4,"Monufia":3,"Bani Suif":2,"Sohag":2,"Fayoum":3,"Kafr Alsheikh":3,"Menya":2,"Matrouh":1,"Aswan":1}},"5wn9ZNfe2aNoMP5DchMwc":{"name":"FRG","id":"5wn9ZNfe2aNoMP5DchMwc","totalOrders":87,"sendTotal":77,"delivered":75,"rto":10,"dsrPct":88.2,"rtoPct":11.8,"branch":{"FM Abo Rawash":10},"gov":{"Giza":17,"Cairo":41,"Dakahlia":5,"Monufia":1,"Luxor":1,"Red Sea":1,"Alexandria":6,"Suez":2,"Damietta":1,"Kafr Alsheikh":1,"Gharbia":2,"El Kalioubia":3,"Menya":3,"Assuit":1,"Bani Suif":2}},"5YRx6atA3U4CMV1PDbiqc":{"name":"FAZZALI","id":"5YRx6atA3U4CMV1PDbiqc","totalOrders":319,"sendTotal":229,"delivered":191,"rto":76,"dsrPct":71.5,"rtoPct":28.5,"branch":{"فرع جسر السويس":2,"FM-Obour":71,"فرع حدائق اكتوبر":1,"فرع أكتوبر":1,"فرع هليوبوليس":1},"gov":{"Cairo":227,"Alexandria":26,"Giza":28,"El Kalioubia":5,"Dakahlia":9,"Menya":4,"Gharbia":7,"Red Sea":1,"Kafr Alsheikh":2,"Damietta":2,"Bani Suif":1,"Monufia":2,"Assuit":3,"Sharqia":1,"North Coast":1}},"7XehyFvul48gBLwQoYjuF":{"name":"FIMKAEG","id":"7XehyFvul48gBLwQoYjuF","totalOrders":2,"sendTotal":1,"delivered":1,"rto":0,"dsrPct":100,"rtoPct":0,"branch":{},"gov":{"Giza":2}},"88iSGODvKDpojRnu9Ern4":{"name":"VEGA","id":"88iSGODvKDpojRnu9Ern4","totalOrders":1948,"sendTotal":1453,"delivered":1332,"rto":464,"dsrPct":74.2,"rtoPct":25.8,"branch":{"فرع العبور":11,"FM-New Cairo":42,"FM-Obour":405,"Zahraa Nasr City Hub":2,"3rd settelment":2,"فرع البحيرة":1,"فرع جسر السويس":1},"gov":{"Giza":332,"Cairo":987,"Dakahlia":42,"Alexandria":140,"Assuit":34,"Suez":18,"Red Sea":33,"Gharbia":49,"Monufia":45,"Sohag":5,"Behira":19,"Sharqia":58,"El Kalioubia":37,"Bani Suif":17,"Ismailia":15,"Fayoum":5,"Menya":24,"Kafr Alsheikh":23,"South Sinai":17,"Damietta":10,"Port Said":19,"Aswan":8,"Qena":3,"Matrouh":4,"Luxor":4}},"8ruenGKXBRzZDFRTDHgDl":{"name":"Dubai shoes","id":"8ruenGKXBRzZDFRTDHgDl","totalOrders":79,"sendTotal":56,"delivered":52,"rto":19,"dsrPct":73.2,"rtoPct":26.8,"branch":{"FM-Obour":19},"gov":{"Ismailia":2,"Gharbia":4,"Alexandria":13,"Matrouh":1,"Cairo":18,"Dakahlia":7,"Sharqia":3,"Giza":11,"Kafr Alsheikh":3,"Damietta":1,"Aswan":1,"Sohag":3,"Suez":2,"Behira":2,"Port Said":1,"Red Sea":1,"Monufia":1,"Assuit":2,"El Kalioubia":3}},"8sqrbqxCczkqrSWGjcwZf":{"name":"As shopping","id":"8sqrbqxCczkqrSWGjcwZf","totalOrders":392,"sendTotal":204,"delivered":185,"rto":180,"dsrPct":50.7,"rtoPct":49.3,"branch":{"Hadayk El Ahram Hub":6,"FM Abo Rawash":174},"gov":{"Cairo":183,"Gharbia":12,"Bani Suif":3,"Suez":9,"Alexandria":51,"Dakahlia":18,"Giza":23,"Damietta":15,"Ismailia":4,"Kafr Alsheikh":9,"El Kalioubia":18,"Sohag":1,"Sharqia":16,"Qena":3,"Red Sea":7,"Port Said":6,"Monufia":5,"South Sinai":2,"Menya":1,"Aswan":2,"Assuit":1,"Fayoum":2,"Behira":1}},"9ArMzaHnU0Ij69iIYnzTX":{"name":"2m group","id":"9ArMzaHnU0Ij69iIYnzTX","totalOrders":541,"sendTotal":461,"delivered":424,"rto":79,"dsrPct":84.3,"rtoPct":15.7,"branch":{"فرع المعادي":4,"FM-Maadi":75},"gov":{"El Kalioubia":26,"Alexandria":86,"Ismailia":15,"Behira":19,"Sharqia":41,"Damietta":5,"Gharbia":21,"Assuit":16,"Sohag":13,"Giza":76,"Fayoum":4,"Qena":14,"Menya":13,"Cairo":65,"South Sinai":6,"Dakahlia":27,"Port Said":10,"Monufia":21,"Red Sea":13,"Bani Suif":12,"Matrouh":3,"Kafr Alsheikh":11,"Luxor":6,"Aswan":10,"Suez":5,"North Coast":2,"New Valley":1}},"a6jQKY0Qm4MnLRfXMJbDL":{"name":"Vintage","id":"a6jQKY0Qm4MnLRfXMJbDL","totalOrders":511,"sendTotal":346,"delivered":292,"rto":164,"dsrPct":64,"rtoPct":36,"branch":{"فرع هليوبوليس":5,"FM-New Cairo":158,"Heliopolis Hub":1},"gov":{"Cairo":229,"Giza":90,"Menya":2,"Qena":1,"El Kalioubia":14,"Alexandria":50,"Behira":4,"Sharqia":17,"South Sinai":6,"Matrouh":6,"Assuit":5,"Gharbia":12,"Port Said":3,"Bani Suif":7,"Fayoum":1,"Red Sea":13,"Dakahlia":19,"Aswan":3,"Monufia":7,"Ismailia":3,"Kafr Alsheikh":8,"Sohag":3,"Suez":5,"Luxor":2,"Damietta":1}},"A8gH5MTPZJAgEkAbs":{"name":"SKMEI","id":"A8gH5MTPZJAgEkAbs","totalOrders":870,"sendTotal":740,"delivered":678,"rto":113,"dsrPct":85.7,"rtoPct":14.3,"branch":{"FM-Obour":111,"فرع العبور":2},"gov":{"Giza":149,"Suez":13,"Ismailia":18,"Cairo":262,"Gharbia":26,"South Sinai":19,"Menya":10,"Matrouh":14,"Monufia":31,"Alexandria":84,"El Kalioubia":44,"Behira":22,"Sharqia":28,"Sohag":5,"Dakahlia":30,"Damietta":15,"Qena":12,"Red Sea":35,"Kafr Alsheikh":8,"Bani Suif":8,"Fayoum":7,"Port Said":9,"Aswan":4,"Luxor":3,"Assuit":10,"North Coast":4}},"bdvpFRBix2uWpFTBQDeix":{"name":"نارمر فاشون","id":"bdvpFRBix2uWpFTBQDeix","totalOrders":350,"sendTotal":288,"delivered":257,"rto":62,"dsrPct":80.6,"rtoPct":19.4,"branch":{"فرع جسر السويس":1,"FM-Obour":60,"Gesr Elsuez Hub":1},"gov":{"Dakahlia":10,"Cairo":174,"Ismailia":3,"Sharqia":12,"Kafr Alsheikh":2,"Assuit":4,"El Kalioubia":5,"Bani Suif":2,"Gharbia":7,"Alexandria":24,"Damietta":3,"Qena":1,"Giza":72,"Red Sea":4,"Suez":1,"Menya":4,"Matrouh":1,"Sohag":6,"Port Said":3,"South Sinai":3,"Behira":2,"North Coast":1,"Monufia":4,"Fayoum":2}},"BlbzeCbP7EerkpELNDlPv":{"name":"Old Street","id":"BlbzeCbP7EerkpELNDlPv","totalOrders":112,"sendTotal":59,"delivered":52,"rto":37,"dsrPct":58.4,"rtoPct":41.6,"branch":{"اسكندريه":37},"gov":{"Cairo":53,"Red Sea":3,"Behira":5,"Giza":16,"Sharqia":4,"Kafr Alsheikh":3,"Alexandria":10,"Damietta":2,"El Kalioubia":1,"Gharbia":3,"Monufia":3,"Dakahlia":2,"Fayoum":1,"South Sinai":1,"Ismailia":1,"Assuit":1,"Aswan":1,"Menya":1,"Sohag":1}},"cFN8PuYrY7m1hlsQIMjkZ":{"name":"MB3","id":"cFN8PuYrY7m1hlsQIMjkZ","totalOrders":328,"sendTotal":283,"delivered":269,"rto":28,"dsrPct":90.6,"rtoPct":9.4,"branch":{"فرع حدائق اكتوبر":2,"FM Abo Rawash":26},"gov":{"Cairo":115,"Monufia":15,"Red Sea":7,"Menya":6,"Behira":13,"Qena":5,"El Kalioubia":9,"Giza":39,"Sohag":7,"Assuit":7,"Dakahlia":14,"Aswan":7,"Gharbia":12,"Alexandria":21,"Matrouh":4,"Sharqia":12,"Suez":3,"Kafr Alsheikh":6,"Ismailia":9,"New Valley":2,"Port Said":2,"Bani Suif":6,"Fayoum":3,"Damietta":1,"South Sinai":1,"Luxor":1,"North Coast":1}},"CG22N9CVxyIwQnBlbMXiw":{"name":"Na scrubs","id":"CG22N9CVxyIwQnBlbMXiw","totalOrders":425,"sendTotal":379,"delivered":357,"rto":43,"dsrPct":89.3,"rtoPct":10.8,"branch":{"فرع البحيرة":43},"gov":{"Behira":19,"Sharqia":25,"Damietta":16,"Cairo":71,"El Kalioubia":12,"Monufia":27,"Kafr Alsheikh":21,"Dakahlia":62,"Sohag":14,"Giza":56,"Port Said":3,"Fayoum":5,"Menya":9,"Assuit":11,"Alexandria":22,"Aswan":2,"Gharbia":23,"Qena":4,"Ismailia":8,"South Sinai":4,"Luxor":3,"Suez":3,"Red Sea":3,"Bani Suif":1,"North Coast":1}},"DiTJbb4n0mCe9KeViaWsg":{"name":"everyher","id":"DiTJbb4n0mCe9KeViaWsg","totalOrders":322,"sendTotal":254,"delivered":194,"rto":59,"dsrPct":76.7,"rtoPct":23.3,"branch":{"فرع المقطم":1,"فرع إمبابة":5,"FM-Maadi":53},"gov":{"Cairo":145,"Assuit":5,"El Kalioubia":11,"Menya":5,"Dakahlia":19,"Giza":56,"Damietta":4,"Sharqia":8,"Alexandria":17,"Monufia":3,"Port Said":6,"Gharbia":13,"Ismailia":4,"Bani Suif":6,"Sohag":5,"Aswan":2,"Kafr Alsheikh":1,"Behira":3,"Red Sea":4,"South Sinai":1,"Luxor":2,"Suez":1,"Fayoum":1}},"DM7K6zLd3Xhmx0HN9UooD":{"name":"Bronze Egypt","id":"DM7K6zLd3Xhmx0HN9UooD","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"eUuI0mFKYLXDUKFlCkk7d":{"name":"Roya","id":"eUuI0mFKYLXDUKFlCkk7d","totalOrders":172,"sendTotal":129,"delivered":114,"rto":40,"dsrPct":74,"rtoPct":26,"branch":{"FM-Maadi":40},"gov":{"Luxor":2,"Cairo":63,"Matrouh":1,"Giza":19,"Damietta":4,"Assuit":1,"Behira":7,"Sharqia":8,"Dakahlia":7,"El Kalioubia":10,"Kafr Alsheikh":3,"Gharbia":11,"Alexandria":13,"Monufia":4,"Suez":2,"Red Sea":1,"Menya":1,"Ismailia":5,"Sohag":6,"North Coast":2,"Fayoum":2}},"ew4AMDbskPMFYcq7p":{"name":"CAESAR","id":"ew4AMDbskPMFYcq7p","totalOrders":65,"sendTotal":44,"delivered":41,"rto":19,"dsrPct":68.3,"rtoPct":31.7,"branch":{"FM-Obour":18,"فرع جسر السويس":1},"gov":{"Cairo":62,"Sharqia":1,"Monufia":1,"El Kalioubia":1}},"FlBueuoU5":{"name":"BusyMen","id":"FlBueuoU5","totalOrders":483,"sendTotal":396,"delivered":338,"rto":79,"dsrPct":81.1,"rtoPct":18.9,"branch":{"Smouha Hub":1,"اسكندريه":78},"gov":{"Red Sea":7,"Cairo":134,"Giza":81,"Sharqia":21,"El Kalioubia":28,"Menya":9,"Assuit":6,"Monufia":9,"Behira":24,"Sohag":16,"Alexandria":56,"Kafr Alsheikh":8,"Damietta":10,"New Valley":1,"Aswan":6,"Dakahlia":14,"Luxor":2,"Port Said":8,"Gharbia":10,"Suez":8,"Ismailia":6,"Fayoum":5,"Qena":8,"Matrouh":3,"South Sinai":2,"Bani Suif":1}},"GCzeLNyfWM1ygWgTmPfzO":{"name":"Ezabilla","id":"GCzeLNyfWM1ygWgTmPfzO","totalOrders":544,"sendTotal":366,"delivered":323,"rto":167,"dsrPct":65.9,"rtoPct":34.1,"branch":{"فرع المقطم":1,"FM Abo Rawash":13,"Fulfillment Hub":150,"3rd settelment":2,"Hadayk October":1},"gov":{"Cairo":261,"Ismailia":3,"Bani Suif":8,"Aswan":8,"Dakahlia":19,"Assuit":4,"Port Said":3,"Giza":90,"Suez":4,"El Kalioubia":14,"Alexandria":33,"Behira":10,"Gharbia":18,"Sharqia":27,"Qena":2,"Kafr Alsheikh":6,"Fayoum":2,"Monufia":12,"Damietta":4,"Menya":7,"Red Sea":4,"South Sinai":2,"Sohag":1,"Matrouh":2}},"gY7BPWowfoflBAFmKsuIF":{"name":"Sorathebrand","id":"gY7BPWowfoflBAFmKsuIF","totalOrders":250,"sendTotal":208,"delivered":184,"rto":31,"dsrPct":85.6,"rtoPct":14.4,"branch":{"فرع بنها":31},"gov":{"Giza":41,"Cairo":131,"Suez":3,"South Sinai":1,"Alexandria":18,"Kafr Alsheikh":4,"Sharqia":8,"Dakahlia":11,"Bani Suif":4,"Luxor":1,"Menya":2,"Qena":1,"El Kalioubia":4,"Ismailia":3,"Gharbia":7,"Sohag":1,"Behira":2,"Monufia":5,"Port Said":1,"Damietta":1,"Assuit":1}},"HekNnrhKYliCDNBpl2HKR":{"name":"Yoush","id":"HekNnrhKYliCDNBpl2HKR","totalOrders":114,"sendTotal":95,"delivered":83,"rto":18,"dsrPct":82.2,"rtoPct":17.8,"branch":{"Marg Hub":1,"FM-Obour":17},"gov":{"Red Sea":2,"Gharbia":3,"Alexandria":17,"Sharqia":6,"Cairo":31,"Sohag":2,"Giza":12,"Damietta":4,"El Kalioubia":8,"Behira":6,"Fayoum":2,"Dakahlia":7,"Luxor":2,"Monufia":4,"Suez":2,"Ismailia":2,"Aswan":3,"Assuit":1}},"HkJ65mLIaVWfdBYbd4o8a":{"name":"nefert","id":"HkJ65mLIaVWfdBYbd4o8a","totalOrders":751,"sendTotal":652,"delivered":633,"rto":92,"dsrPct":87.3,"rtoPct":12.7,"branch":{"فرع مدينة نصر":12,"FM-New Cairo":80},"gov":{"Sohag":5,"Cairo":326,"Giza":125,"Bani Suif":7,"Kafr Alsheikh":6,"Dakahlia":36,"Red Sea":6,"Behira":13,"Sharqia":36,"Aswan":7,"Alexandria":69,"Ismailia":3,"Port Said":8,"Monufia":14,"Assuit":7,"Qena":5,"Gharbia":19,"South Sinai":4,"Matrouh":5,"Damietta":12,"El Kalioubia":24,"Luxor":5,"Suez":8,"Fayoum":1}},"Hx5P3oyYQyUID7kT435yN":{"name":"shewomanstore","id":"Hx5P3oyYQyUID7kT435yN","totalOrders":22,"sendTotal":5,"delivered":4,"rto":1,"dsrPct":80,"rtoPct":20,"branch":{"FM-Obour":1},"gov":{"Kafr Alsheikh":1,"El Kalioubia":2,"Cairo":6,"Giza":3,"Dakahlia":2,"New Valley":1,"Behira":1,"Monufia":1,"Menya":1,"South Sinai":1,"Qena":1,"Fayoum":1,"Gharbia":1}},"IAPBu9gsOHZ2BVAt7vaDL":{"name":"ALMAANDCO","id":"IAPBu9gsOHZ2BVAt7vaDL","totalOrders":48,"sendTotal":46,"delivered":46,"rto":2,"dsrPct":95.8,"rtoPct":4.2,"branch":{"FM Abo Rawash":1,"Unknown":1},"gov":{"Cairo":26,"Giza":5,"El Kalioubia":1,"Alexandria":5,"Red Sea":1,"Dakahlia":3,"Ismailia":1,"Bani Suif":1,"Suez":1,"Damietta":1,"Behira":2,"Gharbia":1}},"j8V9DbyyroX4D6sw0rEaL":{"name":"Secret cotton","id":"j8V9DbyyroX4D6sw0rEaL","totalOrders":611,"sendTotal":549,"delivered":477,"rto":33,"dsrPct":93.5,"rtoPct":6.5,"branch":{"FM-Maadi":28,"فرع بنها":2,"فرع شبرا":3},"gov":{"Gharbia":20,"Giza":111,"Cairo":239,"Monufia":11,"Behira":5,"El Kalioubia":23,"Dakahlia":31,"Alexandria":46,"Suez":7,"Sharqia":30,"Damietta":10,"Red Sea":5,"Menya":10,"Ismailia":10,"Matrouh":5,"Fayoum":6,"Port Said":10,"Bani Suif":9,"Assuit":6,"South Sinai":4,"Luxor":4,"North Coast":1,"Kafr Alsheikh":3,"Sohag":3,"Aswan":2}},"JBE78rge0cU9wH5kCtcO6":{"name":"Sports Mall","id":"JBE78rge0cU9wH5kCtcO6","totalOrders":143,"sendTotal":135,"delivered":128,"rto":8,"dsrPct":94.1,"rtoPct":5.9,"branch":{"FM-Maadi":7,"New Cairo Hub":1},"gov":{"Cairo":57,"Ismailia":3,"Bani Suif":1,"Fayoum":3,"Gharbia":9,"Alexandria":19,"Giza":31,"Sharqia":2,"Red Sea":3,"Sohag":1,"Monufia":2,"Dakahlia":6,"Behira":2,"Port Said":1,"El Kalioubia":1,"Kafr Alsheikh":1,"Suez":1}},"Lf4BtW1XMXdreIEFQc1jk":{"name":"Elle","id":"Lf4BtW1XMXdreIEFQc1jk","totalOrders":365,"sendTotal":235,"delivered":219,"rto":115,"dsrPct":65.6,"rtoPct":34.4,"branch":{"FM-New Cairo":115},"gov":{"Cairo":104,"Dakahlia":22,"Monufia":26,"Gharbia":22,"Giza":49,"Behira":10,"Sharqia":10,"Sohag":5,"Alexandria":27,"Assuit":7,"Kafr Alsheikh":13,"Red Sea":3,"Damietta":9,"Ismailia":4,"Aswan":5,"El Kalioubia":15,"Bani Suif":4,"Menya":6,"Luxor":11,"Suez":4,"Port Said":2,"Qena":3,"Matrouh":1,"Fayoum":3}},"lHpXaXC8pPFv7mFgNWkvg":{"name":"Slipngo","id":"lHpXaXC8pPFv7mFgNWkvg","totalOrders":425,"sendTotal":318,"delivered":294,"rto":86,"dsrPct":77.4,"rtoPct":22.6,"branch":{"فرع المقطم":3,"FM-Maadi":82,"Mokattam Hub":1},"gov":{"Suez":5,"Giza":75,"Damietta":8,"Cairo":232,"Kafr Alsheikh":4,"Gharbia":9,"Monufia":2,"Alexandria":40,"Sharqia":10,"Aswan":4,"El Kalioubia":5,"Fayoum":2,"Dakahlia":7,"Menya":1,"Bani Suif":2,"Red Sea":4,"South Sinai":5,"Behira":3,"Ismailia":2,"Matrouh":2,"Port Said":2,"Assuit":1}},"lWV36xm65kc1rnmWawX7a":{"name":"Trendy And Sporty","id":"lWV36xm65kc1rnmWawX7a","totalOrders":263,"sendTotal":197,"delivered":169,"rto":53,"dsrPct":76.1,"rtoPct":23.9,"branch":{"فرع المعادي":1,"FM-Maadi":52},"gov":{"Giza":60,"Sharqia":6,"Cairo":124,"Dakahlia":4,"Alexandria":17,"Behira":6,"Sohag":4,"El Kalioubia":5,"Red Sea":3,"Monufia":7,"Menya":4,"Luxor":2,"Gharbia":4,"South Sinai":2,"Fayoum":1,"Matrouh":1,"Kafr Alsheikh":2,"Ismailia":3,"Aswan":3,"Bani Suif":3,"Port Said":1,"Damietta":1}},"mfJ8g6HMp8Qsons7tigZ4":{"name":"Cozy nest","id":"mfJ8g6HMp8Qsons7tigZ4","totalOrders":244,"sendTotal":196,"delivered":132,"rto":47,"dsrPct":73.7,"rtoPct":26.3,"branch":{"فرع اكتوبر الجديد":4,"FM Abo Rawash":42,"New October Hub":1},"gov":{"Monufia":3,"Cairo":133,"Giza":40,"Fayoum":4,"Sharqia":5,"Menya":2,"Ismailia":4,"Behira":3,"Port Said":3,"Alexandria":13,"Assuit":3,"Gharbia":7,"Dakahlia":9,"Suez":3,"Damietta":2,"Red Sea":3,"El Kalioubia":5,"Kafr Alsheikh":2}},"MjuNz1T7cIEU14pBbOYcJ":{"name":"Bahgat store","id":"MjuNz1T7cIEU14pBbOYcJ","totalOrders":585,"sendTotal":494,"delivered":456,"rto":71,"dsrPct":86.5,"rtoPct":13.5,"branch":{"فرع القطامية الجديد":1,"FM-New Cairo":70},"gov":{"Dakahlia":25,"Damietta":8,"Cairo":231,"Giza":113,"Alexandria":65,"Kafr Alsheikh":7,"Ismailia":6,"Suez":4,"Red Sea":10,"Matrouh":1,"Behira":13,"Menya":7,"Assuit":6,"Monufia":10,"Bani Suif":7,"Sharqia":24,"Fayoum":7,"Qena":2,"Aswan":1,"Luxor":3,"Sohag":5,"Gharbia":15,"El Kalioubia":9,"Port Said":2,"South Sinai":3,"North Coast":1}},"MMCe3jeQRpC7E4Cx8rqyA":{"name":"STOKE CITY VESTRO","id":"MMCe3jeQRpC7E4Cx8rqyA","totalOrders":182,"sendTotal":150,"delivered":119,"rto":16,"dsrPct":88.1,"rtoPct":11.9,"branch":{"FM-Monufia":3,"فرع المنوفية":13},"gov":{"Matrouh":1,"Dakahlia":10,"Giza":21,"South Sinai":3,"Sharqia":16,"Kafr Alsheikh":5,"Alexandria":15,"Menya":1,"Sohag":2,"Cairo":47,"Gharbia":12,"Aswan":5,"Behira":5,"Suez":4,"Port Said":2,"Monufia":7,"El Kalioubia":14,"Damietta":2,"Red Sea":5,"Qena":1,"Fayoum":2,"Bani Suif":2}},"N2jr3b9CSftneL2tEgvFz":{"name":"Reborn","id":"N2jr3b9CSftneL2tEgvFz","totalOrders":1408,"sendTotal":1213,"delivered":1043,"rto":156,"dsrPct":87,"rtoPct":13,"branch":{"03DSP-Elsadat Hub":16,"فرع المنوفية":4,"FM-Monufia":136},"gov":{"El Kalioubia":51,"Alexandria":154,"Sharqia":69,"Cairo":568,"Dakahlia":61,"Ismailia":17,"Behira":26,"Giza":217,"Gharbia":49,"Kafr Alsheikh":22,"Fayoum":12,"Sohag":14,"Qena":5,"Bani Suif":8,"Aswan":4,"Assuit":15,"Port Said":13,"Damietta":21,"Menya":17,"Monufia":36,"Red Sea":8,"Suez":9,"South Sinai":5,"Matrouh":3,"Luxor":3,"New Valley":1}},"OTrZXf7yUEU6d5yrc3rW9":{"name":"coachesdontplay","id":"OTrZXf7yUEU6d5yrc3rW9","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"OXnPrnlxCL6dM1lUeuACg":{"name":"fash","id":"OXnPrnlxCL6dM1lUeuACg","totalOrders":132,"sendTotal":77,"delivered":53,"rto":55,"dsrPct":49.1,"rtoPct":50.9,"branch":{"FM-New Cairo":55},"gov":{"Giza":42,"Cairo":57,"Alexandria":10,"Gharbia":2,"Dakahlia":3,"Sharqia":5,"Damietta":4,"Menya":2,"El Kalioubia":3,"Assuit":2,"Kafr Alsheikh":2}},"QxuKdvg6jdTWqRZq18VFr":{"name":"Hexa Sportswear","id":"QxuKdvg6jdTWqRZq18VFr","totalOrders":220,"sendTotal":185,"delivered":173,"rto":19,"dsrPct":90.1,"rtoPct":9.9,"branch":{"فرع المهندسين":1,"FM-Maadi":18},"gov":{"Cairo":85,"Dakahlia":8,"Alexandria":33,"Gharbia":5,"Giza":33,"El Kalioubia":15,"Kafr Alsheikh":6,"Behira":3,"Port Said":3,"Sohag":3,"Monufia":4,"Suez":8,"Ismailia":3,"Sharqia":2,"Aswan":1,"Luxor":2,"Bani Suif":2,"Damietta":1,"Fayoum":2,"Red Sea":1}},"QZPVQMD0LYv0PbP5wz05T":{"name":"Pro fit stock","id":"QZPVQMD0LYv0PbP5wz05T","totalOrders":582,"sendTotal":455,"delivered":431,"rto":109,"dsrPct":79.8,"rtoPct":20.2,"branch":{"اسكندريه":109},"gov":{"Cairo":219,"Qena":6,"Dakahlia":15,"Ismailia":10,"Giza":116,"El Kalioubia":40,"Behira":17,"Fayoum":7,"Gharbia":22,"Suez":7,"Sharqia":20,"Damietta":12,"Menya":10,"Monufia":21,"Assuit":12,"South Sinai":2,"Luxor":3,"Bani Suif":9,"Port Said":8,"Red Sea":7,"Kafr Alsheikh":8,"Sohag":4,"North Coast":2,"Matrouh":3,"Alexandria":2}},"S1NEFK9Uwo4KSkHugu4Eu":{"name":"اركان فاشون","id":"S1NEFK9Uwo4KSkHugu4Eu","totalOrders":231,"sendTotal":175,"delivered":156,"rto":39,"dsrPct":80,"rtoPct":20,"branch":{"FM-Maadi":39},"gov":{"Cairo":27,"El Kalioubia":22,"Giza":26,"Sharqia":22,"Monufia":14,"Aswan":16,"Ismailia":4,"Assuit":5,"Luxor":9,"Suez":2,"Kafr Alsheikh":5,"Dakahlia":19,"Alexandria":4,"Gharbia":14,"Qena":9,"Damietta":5,"North Coast":1,"Menya":4,"Behira":6,"Sohag":5,"Fayoum":2,"Bani Suif":5,"South Sinai":3,"Red Sea":2}},"SfBhaJIFuWvNbjZQiiNDj":{"name":"stan","id":"SfBhaJIFuWvNbjZQiiNDj","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"SRNZIHK70qBOPpIZIXFQ7":{"name":"Zena Fashion","id":"SRNZIHK70qBOPpIZIXFQ7","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"TQYFhRo7-":{"name":"مذهلة للعبايات عبايات خليجي","id":"TQYFhRo7-","totalOrders":127,"sendTotal":100,"delivered":82,"rto":20,"dsrPct":80.4,"rtoPct":19.6,"branch":{"فرع المنصورة ":3,"FM-Mansoura":17},"gov":{"Sohag":11,"Qena":11,"Damietta":2,"Monufia":4,"Bani Suif":2,"Sharqia":14,"Gharbia":14,"El Kalioubia":5,"Giza":9,"Red Sea":3,"Dakahlia":19,"Menya":5,"Aswan":1,"Cairo":10,"Kafr Alsheikh":4,"Behira":4,"Ismailia":1,"Fayoum":1,"Alexandria":3,"New Valley":1,"Luxor":1,"Assuit":2}},"RMlaBYIESxg2U9lAyhmBi":{"name":"REVX WEAR","id":"RMlaBYIESxg2U9lAyhmBi","totalOrders":1017,"sendTotal":791,"delivered":707,"rto":177,"dsrPct":80,"rtoPct":20,"branch":{"فرع حلوان":10,"FM-Maadi":164,"Helwan Hub":3},"gov":{"El Kalioubia":49,"Gharbia":42,"Cairo":372,"Kafr Alsheikh":23,"Giza":152,"Suez":8,"Dakahlia":47,"Red Sea":12,"Alexandria":94,"Fayoum":22,"Matrouh":2,"South Sinai":5,"Sharqia":45,"Behira":34,"Assuit":7,"Monufia":26,"Bani Suif":5,"Luxor":5,"Ismailia":6,"Damietta":28,"Sohag":10,"Qena":3,"Menya":13,"Aswan":5,"Port Said":2}},"tt3yXeJHhEWDhDtx7":{"name":"Elan","id":"tt3yXeJHhEWDhDtx7","totalOrders":408,"sendTotal":281,"delivered":238,"rto":122,"dsrPct":66.1,"rtoPct":33.9,"branch":{"Zahraa Nasr City Hub":4,"FM-New Cairo":118},"gov":{"Cairo":243,"Giza":62,"Menya":5,"Port Said":2,"Ismailia":4,"Assuit":5,"El Kalioubia":9,"Dakahlia":9,"Alexandria":35,"Sharqia":3,"Suez":4,"Gharbia":11,"Bani Suif":2,"Kafr Alsheikh":4,"Monufia":4,"Damietta":1,"Fayoum":1,"Qena":1,"Red Sea":1,"Luxor":1,"Sohag":1}},"Va74hanqJtbXHXhsAxoQk":{"name":"HUSHY WEAR","id":"Va74hanqJtbXHXhsAxoQk","totalOrders":241,"sendTotal":117,"delivered":107,"rto":97,"dsrPct":52.5,"rtoPct":47.5,"branch":{"FM-Obour":96,"فرع جسر السويس":1},"gov":{"Cairo":47,"Giza":93,"El Kalioubia":9,"Gharbia":3,"South Sinai":5,"Alexandria":30,"Assuit":3,"Dakahlia":14,"Red Sea":7,"Port Said":3,"Damietta":6,"Sharqia":2,"Qena":2,"Behira":1,"Menya":4,"Luxor":2,"Monufia":4,"Bani Suif":2,"Aswan":1,"Suez":2,"Ismailia":1}},"VSdkEOMyfghjBZGTnuQwh":{"name":"HW Jewllery","id":"VSdkEOMyfghjBZGTnuQwh","totalOrders":137,"sendTotal":122,"delivered":100,"rto":10,"dsrPct":90.9,"rtoPct":9.1,"branch":{"FM-Maadi":10},"gov":{"El Kalioubia":2,"Cairo":61,"Giza":26,"Dakahlia":7,"Sharqia":4,"Gharbia":3,"Bani Suif":3,"Red Sea":3,"Behira":4,"Assuit":1,"Alexandria":14,"Damietta":1,"Port Said":1,"Sohag":4,"Ismailia":1,"Kafr Alsheikh":1,"Menya":1}},"VzOuf8vMYsS7ycjyhELRA":{"name":"elvira","id":"VzOuf8vMYsS7ycjyhELRA","totalOrders":875,"sendTotal":729,"delivered":653,"rto":135,"dsrPct":82.9,"rtoPct":17.1,"branch":{"ElMahala Hub":1,"New Cairo Hub":4,"FM-New Cairo":130},"gov":{"Dakahlia":39,"Cairo":442,"Giza":125,"Gharbia":38,"Alexandria":65,"Bani Suif":11,"Port Said":1,"Monufia":14,"Red Sea":4,"Behira":17,"Damietta":8,"El Kalioubia":13,"Suez":8,"Fayoum":10,"Ismailia":6,"Sohag":8,"Sharqia":42,"Aswan":3,"Qena":3,"Menya":6,"Kafr Alsheikh":6,"Assuit":5,"Luxor":1}},"WK5D6dQzvB3X2f35EQIyh":{"name":"Ora Jewellery","id":"WK5D6dQzvB3X2f35EQIyh","totalOrders":293,"sendTotal":256,"delivered":227,"rto":36,"dsrPct":86.3,"rtoPct":13.7,"branch":{"Hadayk El Ahram Hub":4,"FM Abo Rawash":32},"gov":{"Sharqia":15,"Gharbia":10,"Giza":44,"Alexandria":26,"Monufia":6,"Cairo":131,"Dakahlia":14,"Assuit":2,"Matrouh":3,"Port Said":4,"Behira":4,"Red Sea":5,"South Sinai":1,"Kafr Alsheikh":3,"Ismailia":2,"El Kalioubia":11,"Sohag":2,"Bani Suif":1,"Qena":3,"Menya":1,"North Coast":1,"Suez":2,"Damietta":2}},"WWFJaWIJCuv6p7FauDXOW":{"name":"NOSTALGIA CLOSET","id":"WWFJaWIJCuv6p7FauDXOW","totalOrders":485,"sendTotal":342,"delivered":297,"rto":100,"dsrPct":74.8,"rtoPct":25.2,"branch":{"اسكندريه":98,"فرع خورشيد":2},"gov":{"Dakahlia":41,"Giza":92,"Cairo":152,"Kafr Alsheikh":10,"El Kalioubia":18,"Sharqia":24,"Qena":4,"Gharbia":29,"Damietta":10,"Menya":5,"Ismailia":10,"Red Sea":7,"Alexandria":26,"Sohag":7,"Monufia":10,"Suez":9,"Luxor":2,"Behira":6,"Fayoum":6,"Port Said":5,"Bani Suif":2,"Assuit":4,"North Coast":3,"Matrouh":2,"Aswan":1}},"WY05mHUdGG7UG8OXTsGtO":{"name":"Mzly","id":"WY05mHUdGG7UG8OXTsGtO","totalOrders":195,"sendTotal":147,"delivered":131,"rto":36,"dsrPct":78.4,"rtoPct":21.6,"branch":{"فرع حلوان":5,"FM-Maadi":31},"gov":{"Cairo":75,"Behira":6,"Sharqia":13,"Dakahlia":14,"Kafr Alsheikh":5,"Damietta":4,"Gharbia":13,"Bani Suif":1,"Qena":1,"Giza":25,"Alexandria":13,"Monufia":5,"El Kalioubia":5,"Menya":6,"Aswan":3,"Port Said":2,"Matrouh":1,"Ismailia":2,"Red Sea":1}},"XTdp9GlmCq6":{"name":"Octopus","id":"XTdp9GlmCq6","totalOrders":12,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{"Gharbia":1,"Ismailia":2,"El Kalioubia":2,"Cairo":4,"Sharqia":1,"Monufia":1,"Damietta":1}},"XWmq8iPTdjZ3RSkUAtI33":{"name":"ضَيّ","id":"XWmq8iPTdjZ3RSkUAtI33","totalOrders":335,"sendTotal":303,"delivered":290,"rto":21,"dsrPct":93.2,"rtoPct":6.8,"branch":{"FM-Maadi":21},"gov":{"Alexandria":29,"Aswan":6,"Giza":36,"Sohag":8,"Kafr Alsheikh":21,"Dakahlia":25,"El Kalioubia":22,"Behira":15,"Fayoum":7,"Qena":10,"Port Said":4,"Monufia":14,"Cairo":37,"Suez":2,"Damietta":10,"Bani Suif":9,"Sharqia":28,"Gharbia":26,"Luxor":6,"Menya":9,"South Sinai":1,"Assuit":6,"Ismailia":2,"Matrouh":2}},"YPWMio3lPrBpFikpOe3wx":{"name":"Tuxes","id":"YPWMio3lPrBpFikpOe3wx","totalOrders":700,"sendTotal":480,"delivered":419,"rto":193,"dsrPct":68.5,"rtoPct":31.5,"branch":{"فرع مدينة نصر":12,"FM-New Cairo":180,"Nasr City Hub":1},"gov":{"Giza":108,"Cairo":287,"Sohag":9,"Behira":15,"Red Sea":12,"Assuit":20,"Sharqia":23,"Gharbia":27,"Alexandria":36,"Bani Suif":12,"Menya":15,"Fayoum":10,"Damietta":12,"Port Said":5,"Qena":6,"Kafr Alsheikh":7,"South Sinai":3,"Monufia":19,"Matrouh":9,"Suez":1,"Dakahlia":27,"El Kalioubia":12,"Luxor":8,"Ismailia":10,"Aswan":6,"New Valley":1}},"Z8mhERiMr2so1quIrOMlX":{"name":"Minilet","id":"Z8mhERiMr2so1quIrOMlX","totalOrders":552,"sendTotal":482,"delivered":435,"rto":50,"dsrPct":89.7,"rtoPct":10.3,"branch":{"فرع أكتوبر":2,"FM Abo Rawash":48},"gov":{"Cairo":357,"El Kalioubia":13,"Giza":78,"Behira":6,"Monufia":3,"Alexandria":48,"Sharqia":8,"Gharbia":6,"Ismailia":11,"Assuit":4,"Kafr Alsheikh":3,"Damietta":6,"Dakahlia":6,"Bani Suif":1,"Suez":1,"Red Sea":1}},"ZcVwO98ZFrveTQzpiR8Mj":{"name":"Panzer","id":"ZcVwO98ZFrveTQzpiR8Mj","totalOrders":318,"sendTotal":158,"delivered":117,"rto":160,"dsrPct":42.2,"rtoPct":57.8,"branch":{"FM Abo Rawash":158,"Hadayk El Ahram Hub":2},"gov":{"Damietta":9,"Gharbia":25,"Menya":14,"Dakahlia":33,"Aswan":16,"Bani Suif":5,"Red Sea":5,"Monufia":15,"Ismailia":7,"El Kalioubia":48,"Port Said":10,"Sharqia":30,"Qena":9,"Suez":9,"Sohag":19,"Assuit":16,"Behira":15,"Luxor":4,"Kafr Alsheikh":12,"Cairo":7,"Alexandria":5,"Fayoum":4,"Giza":1}},"ZE4aMhgqLL0erujowUwli":{"name":"KUSH","id":"ZE4aMhgqLL0erujowUwli","totalOrders":431,"sendTotal":332,"delivered":303,"rto":75,"dsrPct":80.2,"rtoPct":19.8,"branch":{"فرع المقطم":2,"FM-New Cairo":72,"3rd settelment":1},"gov":{"Cairo":218,"Giza":82,"Gharbia":11,"Alexandria":37,"Menya":5,"Monufia":5,"Sharqia":8,"Sohag":2,"Dakahlia":13,"Behira":8,"Port Said":5,"Bani Suif":2,"Kafr Alsheikh":4,"South Sinai":2,"Damietta":6,"Red Sea":5,"El Kalioubia":11,"Fayoum":4,"Suez":1,"Ismailia":1,"Luxor":1}},"2wUYAibnA6ZzF7ksxrFHQ":{"name":"Soi","id":"2wUYAibnA6ZzF7ksxrFHQ","totalOrders":178,"sendTotal":120,"delivered":113,"rto":54,"dsrPct":67.7,"rtoPct":32.3,"branch":{"FM-New Cairo":54},"gov":{"Cairo":111,"Alexandria":17,"Giza":32,"Red Sea":6,"Sohag":1,"South Sinai":5,"Damietta":1,"Ismailia":1,"El Kalioubia":1,"Dakahlia":1,"Matrouh":1,"Suez":1}},"3ZoP5pALKAVH9nqC6S9uL":{"name":"Dokan emam","id":"3ZoP5pALKAVH9nqC6S9uL","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"6ObpvfppMVuqn4LNf9oAv":{"name":"Helal","id":"6ObpvfppMVuqn4LNf9oAv","totalOrders":413,"sendTotal":214,"delivered":170,"rto":184,"dsrPct":48,"rtoPct":52,"branch":{"فرع إمبابة":5,"FM-Maadi":177,"Imbaba Hub":2},"gov":{"Cairo":169,"Monufia":12,"Alexandria":23,"Dakahlia":30,"Behira":13,"Bani Suif":5,"Red Sea":8,"Gharbia":13,"El Kalioubia":15,"Sharqia":14,"Suez":3,"Sohag":2,"Port Said":5,"Giza":62,"Aswan":6,"Kafr Alsheikh":5,"North Coast":2,"South Sinai":6,"Assuit":4,"Damietta":5,"Ismailia":6,"Luxor":1,"Fayoum":3,"Qena":1}},"BG8rPysNi9IgXOcWCWSaj":{"name":"Spiaggia swimwear","id":"BG8rPysNi9IgXOcWCWSaj","totalOrders":60,"sendTotal":42,"delivered":42,"rto":7,"dsrPct":85.7,"rtoPct":14.3,"branch":{"FM Abo Rawash":7},"gov":{"Giza":16,"Cairo":34,"Alexandria":8,"Damietta":2}},"BYgxEYoozPzQr8VQcw765":{"name":"باليريون","id":"BYgxEYoozPzQr8VQcw765","totalOrders":232,"sendTotal":165,"delivered":132,"rto":58,"dsrPct":69.5,"rtoPct":30.5,"branch":{"Marg Hub":4,"فرع البحيرة":9,"FM-Obour":45},"gov":{"Cairo":68,"Sharqia":14,"Behira":15,"Menya":7,"El Kalioubia":17,"Monufia":7,"Giza":35,"Bani Suif":5,"Gharbia":15,"Port Said":1,"Dakahlia":9,"Alexandria":12,"Damietta":9,"Qena":2,"Fayoum":2,"Matrouh":3,"Red Sea":2,"Sohag":1,"Ismailia":2,"Kafr Alsheikh":2,"Assuit":1,"Suez":1,"Aswan":2}},"CR8lgrANK7DTWOwueGe9P":{"name":"Gallabia store","id":"CR8lgrANK7DTWOwueGe9P","totalOrders":96,"sendTotal":77,"delivered":72,"rto":15,"dsrPct":82.8,"rtoPct":17.2,"branch":{"فرع البحيرة":15},"gov":{"Assuit":3,"Qena":2,"Giza":15,"Cairo":18,"Sohag":1,"Dakahlia":9,"Monufia":4,"Alexandria":4,"El Kalioubia":5,"Behira":8,"Sharqia":2,"Damietta":2,"Red Sea":1,"Ismailia":3,"Kafr Alsheikh":7,"Fayoum":4,"Matrouh":1,"Menya":3,"Bani Suif":2,"Gharbia":1,"Suez":1}},"dnkqNtJxD40cAVXNWndkq":{"name":"BYNARI","id":"dnkqNtJxD40cAVXNWndkq","totalOrders":200,"sendTotal":158,"delivered":145,"rto":32,"dsrPct":81.9,"rtoPct":18.1,"branch":{"FM-New Cairo":32},"gov":{"Giza":31,"Sharqia":6,"Cairo":115,"Assuit":2,"Bani Suif":2,"El Kalioubia":4,"Gharbia":5,"Suez":3,"Alexandria":15,"Kafr Alsheikh":1,"Ismailia":2,"Port Said":1,"Monufia":2,"Qena":3,"Aswan":1,"Dakahlia":5,"Luxor":1,"Red Sea":1}},"HFr1PvwwVNLRqw1KHoKyT":{"name":"Zeina","id":"HFr1PvwwVNLRqw1KHoKyT","totalOrders":139,"sendTotal":123,"delivered":106,"rto":11,"dsrPct":90.6,"rtoPct":9.4,"branch":{"FM-Obour":11},"gov":{"Dakahlia":15,"Alexandria":29,"Cairo":43,"El Kalioubia":5,"Monufia":1,"Giza":20,"Kafr Alsheikh":4,"Menya":1,"Suez":1,"Damietta":3,"Sharqia":5,"Assuit":2,"Behira":1,"Red Sea":2,"Ismailia":1,"Aswan":2,"Gharbia":3,"Luxor":1}},"hSvIUkxBkgG1IrZ7DqN4R":{"name":"Lama corsets","id":"hSvIUkxBkgG1IrZ7DqN4R","totalOrders":133,"sendTotal":129,"delivered":124,"rto":2,"dsrPct":98.4,"rtoPct":1.6,"branch":{"Port Said Hub":2},"gov":{"South Sinai":1,"El Kalioubia":5,"Giza":24,"Cairo":42,"Alexandria":10,"Damietta":5,"Dakahlia":13,"Red Sea":1,"Assuit":1,"Monufia":4,"Gharbia":9,"Sharqia":5,"Sohag":4,"Behira":2,"Aswan":1,"Suez":1,"Bani Suif":1,"Luxor":1,"Ismailia":2,"Kafr Alsheikh":1}},"IrhkorIcgU5lJPRrWyx1e":{"name":"Zaahe","id":"IrhkorIcgU5lJPRrWyx1e","totalOrders":13,"sendTotal":13,"delivered":10,"rto":0,"dsrPct":100,"rtoPct":0,"branch":{},"gov":{"Cairo":6,"Giza":3,"Alexandria":2,"Red Sea":1,"Ismailia":1}},"k9ilFmevn0sGsMS2eiY3H":{"name":"Sport","id":"k9ilFmevn0sGsMS2eiY3H","totalOrders":474,"sendTotal":392,"delivered":357,"rto":46,"dsrPct":88.6,"rtoPct":11.4,"branch":{"FM-Tanta":46},"gov":{"Giza":58,"Red Sea":5,"Sharqia":19,"Behira":23,"Matrouh":6,"Bani Suif":9,"Sohag":12,"Alexandria":26,"El Kalioubia":22,"Cairo":104,"Gharbia":24,"Monufia":23,"Ismailia":12,"Suez":11,"Dakahlia":42,"South Sinai":4,"Kafr Alsheikh":16,"Aswan":7,"Qena":6,"Fayoum":8,"Damietta":13,"Port Said":2,"Assuit":9,"Menya":9,"Luxor":1,"New Valley":2,"North Coast":1}},"Lvr9rGlaCM1lNqYgyxLGS":{"name":"Tohfa Accessories","id":"Lvr9rGlaCM1lNqYgyxLGS","totalOrders":17,"sendTotal":16,"delivered":9,"rto":1,"dsrPct":90,"rtoPct":10,"branch":{"فرع اكتوبر الجديد":1},"gov":{"Cairo":11,"Suez":1,"Giza":2,"Alexandria":1,"Monufia":1,"Gharbia":1}},"o7cwsG6Jl1NpJxbf8ObsQ":{"name":"ELLA","id":"o7cwsG6Jl1NpJxbf8ObsQ","totalOrders":263,"sendTotal":192,"delivered":185,"rto":60,"dsrPct":75.5,"rtoPct":24.5,"branch":{"FM-New Cairo":59,"Heliopolis Hub":1},"gov":{"Cairo":149,"Gharbia":8,"Assuit":4,"El Kalioubia":5,"Giza":45,"Damietta":2,"Dakahlia":7,"Sharqia":7,"Alexandria":20,"Fayoum":3,"Monufia":3,"Aswan":1,"Behira":2,"Port Said":4,"Kafr Alsheikh":1,"Ismailia":1,"Menya":1}},"oJQNHkW41zZpKVryUb8q5":{"name":"underground egyy","id":"oJQNHkW41zZpKVryUb8q5","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"QhuN2dTHTB25xBCAj7PDc":{"name":"Coverelle","id":"QhuN2dTHTB25xBCAj7PDc","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"r8hxwcns1KKj3TJtoiJfx":{"name":"diva","id":"r8hxwcns1KKj3TJtoiJfx","totalOrders":353,"sendTotal":177,"delivered":145,"rto":175,"dsrPct":45.3,"rtoPct":54.7,"branch":{"اسكندريه":174,"Smouha Hub":1},"gov":{"Cairo":167,"Behira":12,"Giza":74,"El Kalioubia":15,"Gharbia":12,"Alexandria":6,"Menya":6,"Sharqia":7,"North Coast":5,"Dakahlia":14,"Sohag":6,"Damietta":2,"South Sinai":2,"Ismailia":5,"Kafr Alsheikh":4,"Matrouh":2,"Bani Suif":1,"Suez":6,"Monufia":2,"Assuit":2,"Port Said":1,"Qena":2}},"UlpDj7CRca1zUdJ2YOyZl":{"name":"Cameron Kids","id":"UlpDj7CRca1zUdJ2YOyZl","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"we1jwDaqYFviqYhHCO0iM":{"name":"Ex angels","id":"we1jwDaqYFviqYhHCO0iM","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"yiIob2Usdl89J7d2jhkgJ":{"name":"kidliner","id":"yiIob2Usdl89J7d2jhkgJ","totalOrders":1418,"sendTotal":1170,"delivered":1097,"rto":168,"dsrPct":86.7,"rtoPct":13.3,"branch":{"New Cairo Hub":3,"FM-New Cairo":165},"gov":{"Cairo":626,"Aswan":25,"Alexandria":159,"Kafr Alsheikh":19,"Giza":229,"Gharbia":34,"Red Sea":10,"El Kalioubia":31,"Fayoum":7,"Luxor":3,"Dakahlia":89,"Suez":12,"Monufia":31,"Behira":32,"Sharqia":27,"Bani Suif":7,"Sohag":6,"Ismailia":19,"Menya":13,"Port Said":3,"North Coast":1,"Matrouh":4,"Damietta":20,"Assuit":4,"New Valley":3,"Qena":2,"South Sinai":2}},"l5CFYCR3aZaEPAuyzrgF9":{"name":"Bigo store","id":"l5CFYCR3aZaEPAuyzrgF9","totalOrders":169,"sendTotal":168,"delivered":151,"rto":1,"dsrPct":99.3,"rtoPct":0.7,"branch":{"FM-Monufia":1},"gov":{"Gharbia":12,"Dakahlia":25,"Menya":5,"Monufia":13,"Cairo":24,"Damietta":8,"Alexandria":10,"Sharqia":10,"Bani Suif":7,"Giza":13,"Kafr Alsheikh":10,"Behira":9,"Qena":1,"El Kalioubia":6,"Assuit":3,"Port Said":2,"Red Sea":3,"Aswan":2,"Sohag":1,"South Sinai":1,"Fayoum":2,"Suez":1,"Ismailia":1}},"66PoRErUh":{"name":"Supply wear official","id":"66PoRErUh","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"revW8OLplsFwKGv4gErxs":{"name":"Qaim shop","id":"revW8OLplsFwKGv4gErxs","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"8Rq7r9x4H48byWBpaXfO5":{"name":"ملابس زي شرعي","id":"8Rq7r9x4H48byWBpaXfO5","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"rzZXcUUyZ4S6E6WqmvVBX":{"name":"proud","id":"rzZXcUUyZ4S6E6WqmvVBX","totalOrders":346,"sendTotal":173,"delivered":105,"rto":173,"dsrPct":37.8,"rtoPct":62.2,"branch":{"Unknown":5,"اسكندريه":168},"gov":{"Dakahlia":11,"Cairo":187,"Behira":5,"Giza":15,"Fayoum":2,"Bani Suif":3,"Aswan":3,"Alexandria":38,"Port Said":8,"Suez":3,"El Kalioubia":9,"Sharqia":15,"Gharbia":10,"Monufia":4,"Red Sea":3,"Sohag":5,"Kafr Alsheikh":3,"Ismailia":7,"Qena":2,"Assuit":5,"Damietta":4,"North Coast":1,"Menya":2,"Matrouh":1}},"CxmwScolIERXnnNeEelN7":{"name":"Velvet","id":"CxmwScolIERXnnNeEelN7","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"J4lI7K5vi44Hzon2jmZyh":{"name":"SHE","id":"J4lI7K5vi44Hzon2jmZyh","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"lXemmcI22QNzQM8X02Myo":{"name":"Normandy Shoes","id":"lXemmcI22QNzQM8X02Myo","totalOrders":93,"sendTotal":51,"delivered":35,"rto":39,"dsrPct":47.3,"rtoPct":52.7,"branch":{"FM Abo Rawash":37,"فرع اكتوبر الجديد":1,"New October Hub":1},"gov":{"Giza":16,"Cairo":30,"Monufia":4,"South Sinai":3,"Gharbia":4,"Alexandria":3,"Dakahlia":3,"Kafr Alsheikh":4,"Behira":3,"El Kalioubia":3,"Qena":1,"Damietta":3,"Assuit":1,"Sharqia":6,"Aswan":1,"Port Said":1,"Bani Suif":1,"Sohag":1,"Ismailia":3,"Red Sea":1,"Fayoum":1}},"7oI6PlnOa2MfufCj2cb1G":{"name":"Basicwy","id":"7oI6PlnOa2MfufCj2cb1G","totalOrders":112,"sendTotal":63,"delivered":56,"rto":41,"dsrPct":57.7,"rtoPct":42.3,"branch":{"فرع حدائق اكتوبر":1,"FM Abo Rawash":40},"gov":{"Cairo":61,"Kafr Alsheikh":2,"Aswan":1,"Gharbia":2,"Giza":14,"Alexandria":11,"Matrouh":3,"Damietta":5,"Red Sea":2,"Dakahlia":3,"Sharqia":1,"El Kalioubia":2,"Ismailia":2,"Menya":1,"Bani Suif":1,"Behira":1}},"d0Wva2LhvhMM19EJTzLW8":{"name":"Epris","id":"d0Wva2LhvhMM19EJTzLW8","totalOrders":3,"sendTotal":3,"delivered":3,"rto":0,"dsrPct":100,"rtoPct":0,"branch":{},"gov":{"Cairo":2,"Alexandria":1}},"DKB9vM33fJdmsadcmuiAN":{"name":"Flora","id":"DKB9vM33fJdmsadcmuiAN","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"kMdtMPba6ZynHYKf0tl4u":{"name":"Juno Babies","id":"kMdtMPba6ZynHYKf0tl4u","totalOrders":9,"sendTotal":8,"delivered":7,"rto":1,"dsrPct":87.5,"rtoPct":12.5,"branch":{"FM-Maadi":1},"gov":{"Cairo":6,"Giza":2,"Qena":1}},"ld4qeioib8Q7ehbqKvoJS":{"name":"Lebssy","id":"ld4qeioib8Q7ehbqKvoJS","totalOrders":70,"sendTotal":40,"delivered":35,"rto":30,"dsrPct":53.8,"rtoPct":46.2,"branch":{"FM-Maadi":30},"gov":{"El Kalioubia":7,"Cairo":28,"Giza":12,"Suez":2,"Assuit":2,"South Sinai":2,"Matrouh":1,"Menya":1,"Kafr Alsheikh":2,"Gharbia":1,"Port Said":1,"Monufia":2,"Sharqia":1,"Alexandria":3,"Dakahlia":2,"Behira":1,"Ismailia":2}},"vvgwrSDt7q5N3KU6I99Mp":{"name":"natOnat","id":"vvgwrSDt7q5N3KU6I99Mp","totalOrders":193,"sendTotal":172,"delivered":155,"rto":16,"dsrPct":90.6,"rtoPct":9.4,"branch":{"FM-New Cairo":16},"gov":{"Cairo":112,"Giza":39,"Assuit":1,"Alexandria":22,"Fayoum":2,"Gharbia":4,"Dakahlia":2,"Luxor":1,"Damietta":2,"Matrouh":1,"North Coast":1,"Red Sea":1,"Behira":1,"Menya":1,"South Sinai":2,"Sharqia":1}},"YJRqx4UlvHiX6tOBB0gD7":{"name":"ESM STUDIO","id":"YJRqx4UlvHiX6tOBB0gD7","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"ZSW2tadz6w4LTyjnG":{"name":"Nash2","id":"ZSW2tadz6w4LTyjnG","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"Bt51YQsfet96sDAingKBY":{"name":"Olivia","id":"Bt51YQsfet96sDAingKBY","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"OmUkUtZWsHozucfdDxH1C":{"name":"SKMEI EG","id":"OmUkUtZWsHozucfdDxH1C","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"yhks5gxqPlh5VAJbIDHII":{"name":"Calla","id":"yhks5gxqPlh5VAJbIDHII","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"hUNZgLLyQqIXLITDxtvUv":{"name":"Mer maison","id":"hUNZgLLyQqIXLITDxtvUv","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"2bcmqRskUlignfByP0PIP":{"name":"Six Seven Kids","id":"2bcmqRskUlignfByP0PIP","totalOrders":28,"sendTotal":18,"delivered":18,"rto":5,"dsrPct":78.3,"rtoPct":21.7,"branch":{"FM-Maadi":5},"gov":{"Cairo":23,"Giza":5}},"nmEQx0HTwaPijmN1f4N5f":{"name":"Vanilla wear","id":"nmEQx0HTwaPijmN1f4N5f","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"IuZVTj4GwhNZbkUk2Ello":{"name":"Velissemood","id":"IuZVTj4GwhNZbkUk2Ello","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"I2Zs7AilWlNjKJ3VN1YQd":{"name":"Picniceg","id":"I2Zs7AilWlNjKJ3VN1YQd","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"PKcnaTDYqDkN1QMn9dyp3":{"name":"Keif Perfume","id":"PKcnaTDYqDkN1QMn9dyp3","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"JtMGP2PNJqEusjlOAuBZ":{"name":"Sportive","id":"JtMGP2PNJqEusjlOAuBZ","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"TnhmXG3UcfH2MybDYLVSL":{"name":"جبال اليمن","id":"TnhmXG3UcfH2MybDYLVSL","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"aSJ0EwfquiV3dVicdfBFI":{"name":"auto orders","id":"aSJ0EwfquiV3dVicdfBFI","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"In43TFDVeDqzE3A0Va0Rc":{"name":"mirror original","id":"In43TFDVeDqzE3A0Va0Rc","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"hqCZPQMcF73c48lrACnba":{"name":"Maison Bonnet","id":"hqCZPQMcF73c48lrACnba","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"LhGp2pzeIEhrVDEG2ooqa":{"name":"ZBelt","id":"LhGp2pzeIEhrVDEG2ooqa","totalOrders":120,"sendTotal":102,"delivered":79,"rto":18,"dsrPct":81.4,"rtoPct":18.6,"branch":{"فرع إمبابة":2,"FM-Maadi":16},"gov":{"Fayoum":5,"Cairo":26,"El Kalioubia":5,"Kafr Alsheikh":5,"Suez":2,"Dakahlia":5,"Alexandria":15,"Sharqia":9,"Ismailia":5,"Bani Suif":2,"Gharbia":5,"Aswan":4,"Giza":8,"Sohag":5,"Assuit":3,"Monufia":3,"Red Sea":1,"Menya":4,"Qena":3,"Luxor":2,"Behira":2,"Port Said":1}},"IQu2Q6fAiu0g8MTVfsdkj":{"name":"CHERRY FIOWERZ","id":"IQu2Q6fAiu0g8MTVfsdkj","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"engrTtfJcv9EfRSAuLyvB":{"name":"M x ob","id":"engrTtfJcv9EfRSAuLyvB","totalOrders":9,"sendTotal":5,"delivered":5,"rto":4,"dsrPct":55.6,"rtoPct":44.4,"branch":{"FM-New Cairo":4},"gov":{"Cairo":4,"Giza":2,"Dakahlia":1,"Alexandria":2}},"6d26s1dlPQVKqGhkFG4Mt":{"name":"Nexar","id":"6d26s1dlPQVKqGhkFG4Mt","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}},"IsgHDKCXjBnuHJ5VVLwKW":{"name":"coachesdontplayco","id":"IsgHDKCXjBnuHJ5VVLwKW","totalOrders":172,"sendTotal":102,"delivered":95,"rto":48,"dsrPct":66.4,"rtoPct":33.6,"branch":{"FM-New Cairo":48},"gov":{"Giza":27,"Cairo":87,"Gharbia":6,"Qena":4,"Sharqia":5,"Ismailia":7,"Bani Suif":1,"Sohag":1,"El Kalioubia":6,"Alexandria":10,"Dakahlia":4,"Behira":1,"Monufia":2,"Damietta":3,"South Sinai":1,"Assuit":2,"Aswan":1,"Port Said":1,"Kafr Alsheikh":1,"Red Sea":2}},"qJIS4IPcSkSyDgga4tBh7":{"name":"Obsession boutique","id":"qJIS4IPcSkSyDgga4tBh7","totalOrders":228,"sendTotal":145,"delivered":130,"rto":66,"dsrPct":66.3,"rtoPct":33.7,"branch":{"FM-New Cairo":65,"Sheraton Hub":1},"gov":{"Giza":39,"Cairo":82,"Sharqia":9,"Behira":6,"Alexandria":14,"Aswan":3,"Qena":2,"Dakahlia":16,"Gharbia":14,"Damietta":8,"Menya":4,"El Kalioubia":7,"Ismailia":5,"Bani Suif":2,"Monufia":9,"Assuit":1,"Kafr Alsheikh":4,"Port Said":2,"Fayoum":1}},"PhW5SCs1bVGTPHhdPU9vq":{"name":"mr women fahsion","id":"PhW5SCs1bVGTPHhdPU9vq","totalOrders":143,"sendTotal":52,"delivered":43,"rto":87,"dsrPct":33.1,"rtoPct":66.9,"branch":{"FM Abo Rawash":83,"فرع فيصل":3,"Faisal Hub":1},"gov":{"Red Sea":3,"Sharqia":6,"Assuit":7,"Fayoum":4,"Cairo":28,"Gharbia":6,"Alexandria":8,"Dakahlia":12,"Behira":9,"Bani Suif":3,"Ismailia":2,"Kafr Alsheikh":4,"El Kalioubia":6,"Menya":4,"Giza":18,"Sohag":3,"Port Said":2,"Aswan":6,"Monufia":1,"Qena":6,"South Sinai":1,"New Valley":2,"Matrouh":1,"Luxor":1}},"7tmCizhwLQl2c9kpcZDsm":{"name":"Tivra","id":"7tmCizhwLQl2c9kpcZDsm","totalOrders":0,"sendTotal":0,"delivered":0,"rto":0,"dsrPct":null,"rtoPct":null,"branch":{},"gov":{}}};
+
+// PREV holds the last saved snapshot's rtoPct per business (keyed by business id),
+// so we can show whether each business improved or worsened since that snapshot.
+// Empty on the very first run (nothing to compare to yet); populated on every run after.
+const PREV = {"0HUbDC1QdvfBbu5kFUI0j":{"rtoPct":33.3},"0kLUWX2hfmM7wNwU4eCby":{"rtoPct":25},"0xgPZDJXbo3oqJ7RgJAmm":{"rtoPct":null},"1UBflMA1QiDgrl5vfaLAE":{"rtoPct":3.8},"1h2zYsV4gGpDnXeReRZs9":{"rtoPct":41.1},"20p9vudcgg2He2j5nkFnk":{"rtoPct":9.8},"2MLhum7eAaEkXYTLtMKms":{"rtoPct":17.7},"2bcmqRskUlignfByP0PIP":{"rtoPct":21.1},"2wUYAibnA6ZzF7ksxrFHQ":{"rtoPct":32.8},"3ZoP5pALKAVH9nqC6S9uL":{"rtoPct":null},"3dKlRDnUyFyxngZ1jZFFf":{"rtoPct":8.4},"4gqD6KMDoJ6aPmqSRw9hy":{"rtoPct":30.6},"4lpFg3QCuOUFlMqt1LVKd":{"rtoPct":35.7},"5YRx6atA3U4CMV1PDbiqc":{"rtoPct":25.6},"5wn9ZNfe2aNoMP5DchMwc":{"rtoPct":8.9},"66PoRErUh":{"rtoPct":null},"6ObpvfppMVuqn4LNf9oAv":{"rtoPct":49.4},"6d26s1dlPQVKqGhkFG4Mt":{"rtoPct":null},"7XehyFvul48gBLwQoYjuF":{"rtoPct":0},"7oI6PlnOa2MfufCj2cb1G":{"rtoPct":38.7},"7tmCizhwLQl2c9kpcZDsm":{"rtoPct":null},"88iSGODvKDpojRnu9Ern4":{"rtoPct":21.3},"8Rq7r9x4H48byWBpaXfO5":{"rtoPct":null},"8ruenGKXBRzZDFRTDHgDl":{"rtoPct":29.2},"8sqrbqxCczkqrSWGjcwZf":{"rtoPct":49.3},"9ArMzaHnU0Ij69iIYnzTX":{"rtoPct":13.5},"A8gH5MTPZJAgEkAbs":{"rtoPct":12.6},"BG8rPysNi9IgXOcWCWSaj":{"rtoPct":15.6},"BYgxEYoozPzQr8VQcw765":{"rtoPct":26.5},"BlbzeCbP7EerkpELNDlPv":{"rtoPct":38.4},"Bt51YQsfet96sDAingKBY":{"rtoPct":null},"CG22N9CVxyIwQnBlbMXiw":{"rtoPct":10.4},"CR8lgrANK7DTWOwueGe9P":{"rtoPct":20.6},"CxmwScolIERXnnNeEelN7":{"rtoPct":null},"DKB9vM33fJdmsadcmuiAN":{"rtoPct":null},"DM7K6zLd3Xhmx0HN9UooD":{"rtoPct":null},"DiTJbb4n0mCe9KeViaWsg":{"rtoPct":18.6},"FlBueuoU5":{"rtoPct":18},"GCzeLNyfWM1ygWgTmPfzO":{"rtoPct":35.6},"HFr1PvwwVNLRqw1KHoKyT":{"rtoPct":10.1},"HekNnrhKYliCDNBpl2HKR":{"rtoPct":17.8},"HkJ65mLIaVWfdBYbd4o8a":{"rtoPct":10.5},"Hx5P3oyYQyUID7kT435yN":{"rtoPct":0},"I2Zs7AilWlNjKJ3VN1YQd":{"rtoPct":null},"IAPBu9gsOHZ2BVAt7vaDL":{"rtoPct":0},"IQu2Q6fAiu0g8MTVfsdkj":{"rtoPct":null},"In43TFDVeDqzE3A0Va0Rc":{"rtoPct":null},"IrhkorIcgU5lJPRrWyx1e":{"rtoPct":0},"IsgHDKCXjBnuHJ5VVLwKW":{"rtoPct":35.9},"IuZVTj4GwhNZbkUk2Ello":{"rtoPct":null},"J4lI7K5vi44Hzon2jmZyh":{"rtoPct":null},"JBE78rge0cU9wH5kCtcO6":{"rtoPct":5.5},"JtMGP2PNJqEusjlOAuBZ":{"rtoPct":null},"Lf4BtW1XMXdreIEFQc1jk":{"rtoPct":31.9},"LhGp2pzeIEhrVDEG2ooqa":{"rtoPct":19.5},"Lvr9rGlaCM1lNqYgyxLGS":{"rtoPct":0},"MMCe3jeQRpC7E4Cx8rqyA":{"rtoPct":13.5},"MjuNz1T7cIEU14pBbOYcJ":{"rtoPct":13.2},"N2jr3b9CSftneL2tEgvFz":{"rtoPct":13.1},"OTrZXf7yUEU6d5yrc3rW9":{"rtoPct":null},"OXnPrnlxCL6dM1lUeuACg":{"rtoPct":50},"OmUkUtZWsHozucfdDxH1C":{"rtoPct":null},"PKcnaTDYqDkN1QMn9dyp3":{"rtoPct":null},"PhW5SCs1bVGTPHhdPU9vq":{"rtoPct":66},"QZPVQMD0LYv0PbP5wz05T":{"rtoPct":19.3},"QhuN2dTHTB25xBCAj7PDc":{"rtoPct":null},"QxuKdvg6jdTWqRZq18VFr":{"rtoPct":8.1},"RMlaBYIESxg2U9lAyhmBi":{"rtoPct":19.8},"S1NEFK9Uwo4KSkHugu4Eu":{"rtoPct":16.8},"SRNZIHK70qBOPpIZIXFQ7":{"rtoPct":null},"SfBhaJIFuWvNbjZQiiNDj":{"rtoPct":null},"TQYFhRo7-":{"rtoPct":18.7},"TnhmXG3UcfH2MybDYLVSL":{"rtoPct":null},"UlpDj7CRca1zUdJ2YOyZl":{"rtoPct":null},"VSdkEOMyfghjBZGTnuQwh":{"rtoPct":10.2},"Va74hanqJtbXHXhsAxoQk":{"rtoPct":43.7},"VzOuf8vMYsS7ycjyhELRA":{"rtoPct":17.6},"WK5D6dQzvB3X2f35EQIyh":{"rtoPct":13.3},"WWFJaWIJCuv6p7FauDXOW":{"rtoPct":25.4},"WY05mHUdGG7UG8OXTsGtO":{"rtoPct":19.6},"XTdp9GlmCq6":{"rtoPct":null},"XWmq8iPTdjZ3RSkUAtI33":{"rtoPct":7.2},"YJRqx4UlvHiX6tOBB0gD7":{"rtoPct":null},"YPWMio3lPrBpFikpOe3wx":{"rtoPct":28.7},"Z8mhERiMr2so1quIrOMlX":{"rtoPct":10},"ZE4aMhgqLL0erujowUwli":{"rtoPct":19.5},"ZSW2tadz6w4LTyjnG":{"rtoPct":null},"ZcVwO98ZFrveTQzpiR8Mj":{"rtoPct":57.5},"a6jQKY0Qm4MnLRfXMJbDL":{"rtoPct":35.3},"aSJ0EwfquiV3dVicdfBFI":{"rtoPct":null},"bdvpFRBix2uWpFTBQDeix":{"rtoPct":18.5},"cFN8PuYrY7m1hlsQIMjkZ":{"rtoPct":8.3},"d0Wva2LhvhMM19EJTzLW8":{"rtoPct":0},"dnkqNtJxD40cAVXNWndkq":{"rtoPct":15.7},"eUuI0mFKYLXDUKFlCkk7d":{"rtoPct":27.3},"engrTtfJcv9EfRSAuLyvB":{"rtoPct":50},"ew4AMDbskPMFYcq7p":{"rtoPct":32.7},"gY7BPWowfoflBAFmKsuIF":{"rtoPct":9.7},"hSvIUkxBkgG1IrZ7DqN4R":{"rtoPct":1.3},"hUNZgLLyQqIXLITDxtvUv":{"rtoPct":null},"hqCZPQMcF73c48lrACnba":{"rtoPct":null},"j8V9DbyyroX4D6sw0rEaL":{"rtoPct":5.1},"k9ilFmevn0sGsMS2eiY3H":{"rtoPct":9.8},"kMdtMPba6ZynHYKf0tl4u":{"rtoPct":14.3},"l5CFYCR3aZaEPAuyzrgF9":{"rtoPct":0.8},"lHpXaXC8pPFv7mFgNWkvg":{"rtoPct":20.2},"lWV36xm65kc1rnmWawX7a":{"rtoPct":22.1},"lXemmcI22QNzQM8X02Myo":{"rtoPct":50},"ld4qeioib8Q7ehbqKvoJS":{"rtoPct":35.6},"mfJ8g6HMp8Qsons7tigZ4":{"rtoPct":22.9},"nmEQx0HTwaPijmN1f4N5f":{"rtoPct":null},"o7cwsG6Jl1NpJxbf8ObsQ":{"rtoPct":24.9},"oJQNHkW41zZpKVryUb8q5":{"rtoPct":null},"qJIS4IPcSkSyDgga4tBh7":{"rtoPct":41.4},"r8hxwcns1KKj3TJtoiJfx":{"rtoPct":61.8},"revW8OLplsFwKGv4gErxs":{"rtoPct":null},"rzZXcUUyZ4S6E6WqmvVBX":{"rtoPct":59.9},"tt3yXeJHhEWDhDtx7":{"rtoPct":32.9},"vvgwrSDt7q5N3KU6I99Mp":{"rtoPct":6.4},"we1jwDaqYFviqYhHCO0iM":{"rtoPct":null},"yhks5gxqPlh5VAJbIDHII":{"rtoPct":null},"yiIob2Usdl89J7d2jhkgJ":{"rtoPct":12.8}};
+const PREV_META = { date: "14 Sep 2026" };
+
+const businesses = Object.values(DATA);
+const active = businesses.filter(b => b.totalOrders > 0);
+
+function trendOf(id, rtoPct){
+  const prev = PREV[id];
+  if(!prev || prev.rtoPct===null || prev.rtoPct===undefined || rtoPct===null || rtoPct===undefined) return null;
+  const delta = rtoPct - prev.rtoPct; // positive = RTO% went up = worse
+  if(Math.abs(delta) < 0.5) return {dir:'flat', delta};
+  return delta > 0 ? {dir:'down', delta} : {dir:'up', delta};
+}
+function trendBadge(id, rtoPct){
+  const t = trendOf(id, rtoPct);
+  if(!t) return '<span class="trend na" title="مفيش تحديث سابق نقارن بيه">•</span>';
+  if(t.dir==='flat') return `<span class="trend flat" title="زي التحديث اللي فات تقريبًا">→ ${Math.abs(t.delta).toFixed(1)}pp</span>`;
+  if(t.dir==='up') return `<span class="trend up" title="تحسّن عن آخر تحديث">▲ ${Math.abs(t.delta).toFixed(1)}pp</span>`;
+  return `<span class="trend down" title="تراجع عن آخر تحديث">▼ ${Math.abs(t.delta).toFixed(1)}pp</span>`;
+}
+if(PREV_META.date){
+  const el = document.getElementById('trendMeta');
+  el.style.display='inline-flex';
+  el.innerHTML = `<span class="dot"></span> الأسهم بتقارن بتحديث <b>${PREV_META.date}</b>`;
+}
+
+// ---------- KPIs ----------
+const totOrders = businesses.reduce((s,b)=>s+b.totalOrders,0);
+const totDelivered = businesses.reduce((s,b)=>s+b.delivered,0);
+const totRto = businesses.reduce((s,b)=>s+b.rto,0);
+const denom = totDelivered + totRto;
+const portfolioDSR = denom ? (totDelivered/denom*100) : 0;
+const portfolioRTO = denom ? (totRto/denom*100) : 0;
+const atRisk = active.filter(b => b.totalOrders>=10 && b.rtoPct!==null && b.rtoPct>=25).length;
+
+function fmt(n){ return n.toLocaleString('en-US'); }
+function pct(n){ return n===null||n===undefined ? '—' : n.toFixed(1)+'%'; }
+
+const kpis = [
+  {label:'Active businesses', value: fmt(active.length), foot: (businesses.length-active.length)+' had zero orders this month', cls:''},
+  {label:'Total orders picked up', value: fmt(totOrders), foot: fmt(totDelivered)+' delivered · '+fmt(totRto)+' RTO', cls:'accent'},
+  {label:'Portfolio DSR', value: portfolioDSR.toFixed(1)+'%', foot:'delivered ÷ (delivered+RTO)', cls: portfolioDSR>=80?'good':portfolioDSR>=65?'warn':'critical'},
+  {label:'Portfolio RTO', value: portfolioRTO.toFixed(1)+'%', foot: fmt(totRto)+' returned orders', cls: portfolioRTO<=15?'good':portfolioRTO<=30?'warn':'critical'},
+  {label:'Businesses at risk', value: fmt(atRisk), foot:'RTO ≥ 25%, ≥10 orders', cls: atRisk>0?'critical':'good'},
+];
+document.getElementById('kpiRow').innerHTML = kpis.map(k => `
+  <div class="kpi ${k.cls}">
+    <div class="label">${k.label}</div>
+    <div class="value">${k.value}</div>
+    <div class="foot">${k.foot}</div>
+  </div>`).join('');
+document.getElementById('hdrCount').textContent = businesses.length;
+
+// ---------- status classification ----------
+function statusOf(b){
+  if(b.totalOrders < 5) return {cls:'muted', label:'Low data'};
+  if(b.rtoPct >= 35) return {cls:'critical', label:'Critical'};
+  if(b.rtoPct >= 20) return {cls:'warn', label:'Watch'};
+  return {cls:'good', label:'Healthy'};
+}
+
+// ---------- alerts ----------
+const alertPool = active.filter(b => b.totalOrders >= 10 && b.rtoPct !== null)
+  .sort((a,b) => b.rto - a.rto)
+  .slice(0, 8);
+document.getElementById('alertsBody').innerHTML = alertPool.map((b,i) => {
+  const st = statusOf(b);
+  return `<div class="alert-item">
+    <div class="alert-rank">${i+1}</div>
+    <div class="alert-main">
+      <div class="alert-name" dir="auto">${b.name}</div>
+      <div class="alert-sub">${fmt(b.totalOrders)} orders this month · DSR ${pct(b.dsrPct)}</div>
+    </div>
+    <div class="alert-figs">
+      <div class="alert-rto pill ${st.cls}"><span class="sq"></span>${pct(b.rtoPct)}${trendBadge(b.id, b.rtoPct)}</div>
+      <div class="alert-count">${fmt(b.rto)} RTO orders</div>
+    </div>
+  </div>`;
+}).join('') || '<div style="color:var(--text-muted);font-size:13px;">No businesses meet the volume threshold this month.</div>';
+
+// ---------- scatter: orders (log x) vs rtoPct (y) ----------
+(function(){
+  const W=560,H=300,padL=42,padR=16,padT=14,padB=34;
+  const pool = active.filter(b=>b.rtoPct!==null);
+  const maxOrders = Math.max(...pool.map(b=>b.totalOrders),1);
+  const xScale = v => padL + (Math.log(v+1)/Math.log(maxOrders+1)) * (W-padL-padR);
+  const yScale = v => padT + (1 - v/100) * (H-padT-padB);
+  const css = getComputedStyle(document.documentElement);
+  const colorFor = (b)=>{ const s=statusOf(b); return s.cls==='critical'?'var(--critical)':s.cls==='warn'?'var(--warn)':s.cls==='muted'?'var(--muted-badge)':'var(--good)'; };
+
+  let ticksY = [0,20,40,60,80,100];
+  let gridlines = ticksY.map(t=>`<line x1="${padL}" x2="${W-padR}" y1="${yScale(t)}" y2="${yScale(t)}" stroke="var(--border)" stroke-width="1"/>
+    <text x="${padL-8}" y="${yScale(t)+4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="IBM Plex Mono, monospace">${t}%</text>`).join('');
+
+  let xticks = [1,10,100,1000].filter(v=>v<=maxOrders*1.2);
+  let xgrid = xticks.map(t=>`<text x="${xScale(t)}" y="${H-padB+16}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="IBM Plex Mono, monospace">${t}</text>`).join('');
+
+  let dots = pool.map(b => `<circle cx="${xScale(b.totalOrders).toFixed(1)}" cy="${yScale(b.rtoPct).toFixed(1)}" r="${b.totalOrders>=300?5:b.totalOrders>=80?4:3}" fill="${colorFor(b)}" fill-opacity="0.8" stroke="var(--surface)" stroke-width="0.6"><title>${b.name}: ${fmt(b.totalOrders)} orders, RTO ${pct(b.rtoPct)}</title></circle>`).join('');
+
+  const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    ${gridlines}
+    <line x1="${padL}" x2="${W-padR}" y1="${H-padB}" y2="${H-padB}" stroke="var(--border)" stroke-width="1"/>
+    ${xgrid}
+    <text x="${(padL+W-padR)/2}" y="${H-4}" text-anchor="middle" font-size="10.5" fill="var(--text-muted)" font-family="IBM Plex Sans, sans-serif">orders this month (log scale) →</text>
+    <text x="14" y="${padT+6}" font-size="10.5" fill="var(--text-muted)" font-family="IBM Plex Sans, sans-serif" transform="rotate(-90 14 ${padT+6})" text-anchor="end">RTO % →</text>
+    ${dots}
+  </svg>`;
+  document.getElementById('scatterBody').innerHTML = svg + `<div class="scatter-legend">
+    <span><i style="background:var(--good)"></i> Healthy (&lt;20% RTO)</span>
+    <span><i style="background:var(--warn)"></i> Watch (20–35%)</span>
+    <span><i style="background:var(--critical)"></i> Critical (&gt;35%)</span>
+    <span><i style="background:var(--muted-badge)"></i> Low data (&lt;5 orders)</span>
+  </div>`;
+})();
+
+// ---------- table ----------
+let sortKey = 'rtoPct', sortDir = -1;
+let hideZero = true;
+let filterText = '';
+
+function rtoBarColor(b){
+  const s = statusOf(b);
+  return s.cls==='critical'?'var(--critical)':s.cls==='warn'?'var(--warn)':s.cls==='muted'?'var(--muted-badge)':'var(--good)';
+}
+function topEntry(obj){
+  const entries = Object.entries(obj||{});
+  if(!entries.length) return null;
+  entries.sort((a,b)=>b[1]-a[1]);
+  return entries[0];
+}
+
+function renderTable(){
+  let rows = businesses.slice();
+  if(hideZero) rows = rows.filter(b=>b.totalOrders>0);
+  if(filterText) rows = rows.filter(b=>b.name.toLowerCase().includes(filterText) || b.id.toLowerCase().includes(filterText));
+  rows.sort((a,b)=>{
+    let av=a[sortKey], bv=b[sortKey];
+    if(sortKey==='name'){ av=a.name.toLowerCase(); bv=b.name.toLowerCase(); return sortDir*(av<bv?-1:av>bv?1:0); }
+    if(sortKey==='status'){ av=statusOf(a).label; bv=statusOf(b).label; return sortDir*(av<bv?-1:av>bv?1:0); }
+    av = av===null||av===undefined ? -1 : av;
+    bv = bv===null||bv===undefined ? -1 : bv;
+    return sortDir*(av-bv);
+  });
+  document.getElementById('rowCount').textContent = rows.length + ' of ' + businesses.length + ' shown';
+  document.getElementById('bizBody').innerHTML = rows.map(b=>{
+    const st = statusOf(b);
+    const topBranch = topEntry(b.branch);
+    const topGov = topEntry(b.gov);
+    return `<tr>
+      <td class="name" dir="auto">${b.name}</td>
+      <td class="num">${fmt(b.totalOrders)}</td>
+      <td class="num">${fmt(b.delivered)}</td>
+      <td class="num">${fmt(b.rto)}</td>
+      <td class="num">${pct(b.dsrPct)}</td>
+      <td class="num"><div class="bar-cell" style="justify-content:flex-end;"><span>${pct(b.rtoPct)}</span><div class="bar-track"><div class="bar-fill" style="width:${b.rtoPct?Math.min(b.rtoPct,100):0}%;background:${rtoBarColor(b)}"></div></div>${trendBadge(b.id, b.rtoPct)}</div></td>
+      <td><span class="pill ${st.cls}"><span class="sq"></span>${st.label}</span></td>
+      <td class="branch" dir="auto">${topBranch? topBranch[0]+' ('+topBranch[1]+')' : '—'}</td>
+      <td class="gov" dir="auto">${topGov? topGov[0]+' ('+topGov[1]+')' : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('#bizTable thead th[data-key]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.getAttribute('data-key');
+    if(sortKey===key){ sortDir *= -1; } else { sortKey = key; sortDir = -1; }
+    document.querySelectorAll('#bizTable thead th').forEach(x=>x.classList.remove('sorted','asc'));
+    th.classList.add('sorted'); if(sortDir===1) th.classList.add('asc');
+    renderTable();
+  });
+});
+document.getElementById('searchBox').addEventListener('input', e=>{ filterText = e.target.value.toLowerCase(); renderTable(); });
+document.getElementById('hideZero').addEventListener('change', e=>{ hideZero = e.target.checked; renderTable(); });
+renderTable();
+
+// ---------- national governorate + branch aggregates ----------
+function aggregate(field){
+  const totals = {};
+  businesses.forEach(b => Object.entries(b[field]||{}).forEach(([k,v])=>{ totals[k]=(totals[k]||0)+v; }));
+  return Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+}
+function renderBarlist(containerId, entries, max){
+  const top = entries.slice(0,12);
+  const maxVal = top.length? top[0][1] : 1;
+  document.getElementById(containerId).innerHTML = top.map(([k,v])=>`
+    <div class="row">
+      <div class="lbl" dir="auto" title="${k}">${k}</div>
+      <div class="track"><div class="fill" style="width:${(v/maxVal*100).toFixed(1)}%"></div></div>
+      <div class="val">${fmt(v)}</div>
+    </div>`).join('');
+}
+renderBarlist('govBars', aggregate('gov'));
+renderBarlist('branchBars', aggregate('branch'));
+</script>
